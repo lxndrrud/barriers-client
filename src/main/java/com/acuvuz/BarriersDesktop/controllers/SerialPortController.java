@@ -1,5 +1,6 @@
 package com.acuvuz.BarriersDesktop.controllers;
 
+import com.acuvuz.BarriersDesktop.JSONMappers.User;
 import com.acuvuz.BarriersDesktop.MainApplication;
 import com.acuvuz.BarriersDesktop.services.MovementService;
 import com.fazecast.jSerialComm.*;
@@ -22,7 +23,7 @@ public class SerialPortController {
 
     private SerialPortController() {
         movementService = new MovementService();
-        loadSettings("/dev/ttyUSB1");
+        loadSettings("/dev/ttyUSB0");
     }
 
     private void loadSettings(String portDescriptor) {
@@ -43,8 +44,16 @@ public class SerialPortController {
                 }
                 byte[] readBuffer = new byte[1024];
                 int numRead = port.readBytes(readBuffer, readBuffer.length);
+
                 String portData = new String(readBuffer, StandardCharsets.UTF_8);
-                movementService.sendSkudCardInfo(portData);
+                if (portData.contains("@Code")) {
+                    User user = movementService.sendSkudCardInfo(portData);
+
+                    if (user != null) writeToPort("@Code=user-success;@reader=exit");
+                    else writeToPort("@Code=user-not-found;@reader=exit");
+
+                }
+
                 if (numRead > 0) {
                     System.out.println("На сериал порт что-то пришло!!!");
                     System.out.println(portData);
