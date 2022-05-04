@@ -3,26 +3,25 @@ package com.acuvuz.BarriersDesktop.services;
 import com.acuvuz.BarriersDesktop.JSONMappers.Movement;
 import com.acuvuz.BarriersDesktop.JSONMappers.User;
 import com.google.gson.Gson;
+import com.sun.net.httpserver.Request;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
+
 import java.net.URI;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
 
 public class MovementService {
     private final RootService root;
@@ -58,34 +57,14 @@ public class MovementService {
             return new Movement[]{};
         }
     }
-    public Movement[] getAllOld(String from, String to) {
-        try {
-            // Create a neat value object to hold the URL
-            URL url = new URL(String.format(this.root.getHost() + "/movements?from=%s&to=%s", from, to));
-
-            // Open a connection(?) on the URL(??) and cast the response(???)
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-            // This line makes the request
-            InputStream responseStream = connection.getInputStream();
-
-            Gson gson = new Gson();
-
-            return gson.fromJson(new BufferedReader(new InputStreamReader(responseStream)), Movement[].class);
-
-        } catch (Exception e) {
-            System.out.println(e);
-            System.out.println("Ошибка в поиске перемещений!");
-            return new Movement[]{};
-        }
-    }
 
     public User sendSkudCardInfo(String portData) {
         System.out.println(portData);
 
         var variables = portData.split(";");
+        System.out.println(variables);
         String code = variables[0].split("=")[1];
-        String reader = variables[1].split("=")[1];
+        //String reader = variables[1].split("=")[1];
         try {
             var client = HttpClientBuilder.create().build();
             HttpGet httpGet = new HttpGet(this.root.getHost() + "/users/skudCard");
@@ -95,8 +74,8 @@ public class MovementService {
             httpGet.setURI(uri);
             HttpResponse response = client.execute(httpGet);
 
+            String data = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
             if (response.getStatusLine().getStatusCode() == 200) {
-                String data = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
                 Gson gson = new Gson();
                 User user = gson.fromJson(data, User.class);
                 client.close();
@@ -107,6 +86,41 @@ public class MovementService {
         } catch (Exception e) {
             System.out.println(e);
             return new User();
+        }
+    }
+
+    public int createMovementAction(String portData) {
+
+        // Парсинг данных с порта
+        var variables = portData.split(";");
+        String code = variables[0].split("=")[1];
+        String reader = variables[1].split("=")[1].trim();
+        System.out.println("Code: '" + code + "'");
+        System.out.println("Reader: '" + reader + "'");
+
+        try {
+            var client = HttpClientBuilder.create().build();
+
+            HttpPost httpPost = new HttpPost(this.root.getHost() + "/movements/action");
+
+            List<NameValuePair> params = new ArrayList<>();
+            params.add(new BasicNameValuePair("id_building", Integer.toString(this.root.getIdBuilding())));
+            params.add(new BasicNameValuePair("event", reader));
+            params.add(new BasicNameValuePair("skud_card", code));
+
+            httpPost.setEntity(new UrlEncodedFormEntity(params));
+
+            HttpResponse response = client.execute(httpPost);
+
+            String data = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+            System.out.println(data);
+
+            client.close();
+            int returnCode = response.getStatusLine().getStatusCode();
+            return returnCode;
+        } catch (Exception e) {
+            System.out.println("Обосрался!");
+            return 500;
         }
     }
 }

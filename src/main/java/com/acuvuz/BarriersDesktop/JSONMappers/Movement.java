@@ -1,5 +1,9 @@
 package com.acuvuz.BarriersDesktop.JSONMappers;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Date;
+
 public class Movement {
     public int id;
     public int id_building;

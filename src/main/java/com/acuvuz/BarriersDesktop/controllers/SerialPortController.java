@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class SerialPortController {
@@ -20,6 +21,8 @@ public class SerialPortController {
         return instance;
     }
     private SerialPort port;
+
+    private Thread thread;
 
     private SerialPortController() {
         movementService = new MovementService();
@@ -39,22 +42,37 @@ public class SerialPortController {
         port.openPort();
         try {
             while (port.isOpen()) {
+                /*
                 while (port.bytesAvailable() == 0) {
                     Thread.sleep(30);
                 }
-                byte[] readBuffer = new byte[1024];
-                int numRead = port.readBytes(readBuffer, readBuffer.length);
-
-                String portData = new String(readBuffer, StandardCharsets.UTF_8);
+                 */
+                String portData = readFromPort();
                 if (portData.contains("@Code")) {
                     User user = movementService.sendSkudCardInfo(portData);
 
-                    if (user != null) writeToPort("@Code=user-success;@reader=exit");
-                    else writeToPort("@Code=user-not-found;@reader=exit");
+                    if (user.id == 0) {
+                        System.out.println("here");
+                        writeToPort("@Code=user-not-found;@reader=exit");
+                        continue;
+                    }
+                    writeToPort("@Code=user-success;@reader=exit");
+                    Thread.sleep(3500);
+                    String afterDelay = readFromPort();
 
+                    if (afterDelay.contains("exit-success")) {
+                        // Послать запрос на го-сервер
+                        int returnCode = movementService.createMovementAction(portData);
+                        if (returnCode != 201) {
+                            System.out.println("Произошла ошибка!");
+                        }
+                    }
+                    else {
+                        writeToPort("@Code=lock;@reader=exit");
+                    }
                 }
 
-                if (numRead > 0) {
+                if (!portData.equals("")) {
                     System.out.println("На сериал порт что-то пришло!!!");
                     System.out.println(portData);
                 }
@@ -66,20 +84,17 @@ public class SerialPortController {
     }
 
     public void run() {
-        new Thread(new Runnable() {
-            public void run()
-            {
-                // perform any operation
-                System.out.println("Performing operation in Asynchronous Task");
-                listenPort();
-            }
-        }).start();
+        this.thread = new Thread(() -> {
+            // perform any operation
+            System.out.println("Performing operation in Asynchronous Task");
+            listenPort();
+        });
+        this.thread.start();
     }
 
     public void writeToPort(String s) {
-        port = SerialPort.getCommPort("/dev/ttyUSB0");
         port.setBaudRate(9600);
-
+        System.out.println(port.isOpen());
         if (port.isOpen()) {
             // Записываю в порт
             byte[] writeBuffer = s.getBytes(StandardCharsets.UTF_8);
@@ -87,6 +102,15 @@ public class SerialPortController {
             System.out.println("bytes wrote " + bytesWrote);
         }
         else System.out.println("Порт закрыт!");
+    }
+
+    public String readFromPort() {
+        byte[] readBuffer = new byte[1024];
+        int numRead = port.readBytes(readBuffer, readBuffer.length);
+        if (numRead == 0) {
+            return "";
+        }
+        return new String(readBuffer, StandardCharsets.UTF_8);
     }
 
 
