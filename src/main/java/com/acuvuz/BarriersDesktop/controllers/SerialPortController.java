@@ -26,7 +26,7 @@ public class SerialPortController {
 
     private SerialPortController() {
         movementService = new MovementService();
-        loadSettings("/dev/ttyUSB0");
+        loadSettings("/dev/ttyUSB1");
     }
 
     private void loadSettings(String portDescriptor) {
@@ -59,16 +59,20 @@ public class SerialPortController {
                     writeToPort("@Code=user-success;@reader=exit");
                     Thread.sleep(3500);
                     String afterDelay = readFromPort();
-
                     if (afterDelay.contains("exit-success")) {
                         // Послать запрос на го-сервер
                         int returnCode = movementService.createMovementAction(portData);
                         if (returnCode != 201) {
                             System.out.println("Произошла ошибка!");
                         }
+                        else {
+                            System.out.println("Удачно!");
+                        }
                     }
                     else {
+                        System.out.println("here");
                         writeToPort("@Code=lock;@reader=exit");
+                        int returnCode = movementService.createFailMovementAction(portData);
                     }
                 }
 
@@ -92,12 +96,12 @@ public class SerialPortController {
         this.thread.start();
     }
 
-    public void writeToPort(String s) {
+    public void writeToPort(String toWrite) {
         port.setBaudRate(9600);
-        System.out.println(port.isOpen());
         if (port.isOpen()) {
             // Записываю в порт
-            byte[] writeBuffer = s.getBytes(StandardCharsets.UTF_8);
+            System.out.println(toWrite.trim());
+            byte[] writeBuffer = toWrite.trim().getBytes(StandardCharsets.UTF_8);
             int bytesWrote = port.writeBytes(writeBuffer, writeBuffer.length);
             System.out.println("bytes wrote " + bytesWrote);
         }

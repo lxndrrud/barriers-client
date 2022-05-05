@@ -98,6 +98,19 @@ public class MovementService {
         System.out.println("Code: '" + code + "'");
         System.out.println("Reader: '" + reader + "'");
 
+        return sendCreateMovementActionRequest(reader, code);
+    }
+
+    public int createFailMovementAction(String portData) {
+        // Парсинг данных с порта
+        var variables = portData.split(";");
+        String code = variables[0].split("=")[1];
+        System.out.println("Code: '" + code + "'");
+
+        return sendCreateMovementActionRequest("fail", code);
+    }
+
+    private int sendCreateMovementActionRequest(String event, String skudCard) {
         try {
             var client = HttpClientBuilder.create().build();
 
@@ -105,8 +118,8 @@ public class MovementService {
 
             List<NameValuePair> params = new ArrayList<>();
             params.add(new BasicNameValuePair("id_building", Integer.toString(this.root.getIdBuilding())));
-            params.add(new BasicNameValuePair("event", reader));
-            params.add(new BasicNameValuePair("skud_card", code));
+            params.add(new BasicNameValuePair("event", event));
+            params.add(new BasicNameValuePair("skud_card", skudCard));
 
             httpPost.setEntity(new UrlEncodedFormEntity(params));
 
@@ -118,9 +131,11 @@ public class MovementService {
             client.close();
             int returnCode = response.getStatusLine().getStatusCode();
             return returnCode;
-        } catch (Exception e) {
-            System.out.println("Обосрался!");
+        } catch (Exception e ) {
+            System.out.println("Ошибка при запросе на сервер");
             return 500;
         }
     }
+
+
 }
