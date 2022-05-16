@@ -60,17 +60,17 @@ String getValue(String data, char separator, int index)
 
 
 void loop() {
-  delay(50);
+  delay(308);
 
   // Проверка прохода
   if (digitalRead(48) == HIGH) {
-    
+    delay(200);
     digitalWrite(7, HIGH);
     digitalWrite(9, HIGH);
     Serial.println("enter-success");
   }
   if (digitalRead(50) == HIGH) {
-    
+    delay(200);
     digitalWrite(4, HIGH);
     digitalWrite(8, HIGH);
     Serial.println("exit-success");
@@ -114,46 +114,12 @@ void loop() {
     // @Code=user-success;@reader=exit or @Code=user-success;@reader=enter
     if (code == "user-success") {
       if (reader == "exit") {
-        bool exited = false;
         digitalWrite(4, LOW);
         digitalWrite(8, LOW);
-        for (int i=0; i < 350; i++ ) {
-          if (digitalRead(50) == HIGH) {
-            digitalWrite(4, HIGH);
-            digitalWrite(8, HIGH);
-            Serial.println("exit-success");
-            exited = true;
-            break;
-          } 
-          delay(10);
-        }
-        digitalWrite(4, HIGH);
-        digitalWrite(8, HIGH);
-        if (!exited) {
-          Serial.println("exit-fail");
-        }
-        
       }
       else if (reader == "enter") {
-        bool entered = false;
         digitalWrite(7, LOW);
         digitalWrite(9, LOW);
-        for (int i=0; i < 350; i++ ) {
-          if (digitalRead(48) == HIGH) {
-            digitalWrite(7, HIGH);
-            digitalWrite(9, HIGH);
-            Serial.println("enter-success");
-            entered = true;
-            break;
-          }
-          delay(10);
-        }
-        digitalWrite(7, HIGH);
-        digitalWrite(9, HIGH);
-        if (!entered) {
-          Serial.println("enter-fail");
-        }
-        
       }
     }
 

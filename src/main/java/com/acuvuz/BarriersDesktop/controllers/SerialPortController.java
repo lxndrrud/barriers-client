@@ -25,7 +25,7 @@ public class SerialPortController {
 
     private SerialPortController() {
         movementService = new MovementService();
-        loadSettings("/dev/ttyUSB0");
+        loadSettings("/dev/ttyUSB2");
     }
 
     private void loadSettings(String portDescriptor) {
@@ -36,7 +36,7 @@ public class SerialPortController {
         port.closePort();
     }
 
-    public void listenPort() {
+    public void listenToPortOld() {
         port.setBaudRate(9600);
         port.openPort();
         try {
@@ -58,10 +58,9 @@ public class SerialPortController {
 
                     writeToPort("@Code=user-success;@reader=exit");
                     boolean entered = false;
-                    int change = 308;
+                    int change = 50;
                     int secondsToWait = 3;
-                    var from = System.currentTimeMillis();
-                    boolean canSleep = true;
+                    long from = System.currentTimeMillis();
                     for (int i = 0; i < secondsToWait * 1000; i++) {
                         Thread.sleep(change);
                         String afterDelay = readFromPort();
@@ -88,6 +87,30 @@ public class SerialPortController {
                         writeToPort("@Code=lock;@reader=exit");
 
                         System.out.println(System.currentTimeMillis() - from);
+
+                        int timesToCheck = 3;
+                        for (int i = 0; i < timesToCheck * 10; i++) {
+                            String check = readFromPort();
+                            if (check.contains("exit-success")) {
+                                System.out.println("EXIT GIGA SUCCESS");
+                                // Послать запрос на го-сервер
+                                entered = true;
+                                int returnCode = movementService.createMovementAction(portData);
+                                if (returnCode != 201) {
+                                    System.out.println("Произошла ошибка!");
+                                }
+                                break;
+                            }
+
+                            Thread.sleep(10);
+                        }
+                        if(!entered) {
+                            int returnCode = movementService.createFailMovementAction(portData);
+                            if (returnCode != 201) {
+                                System.out.println("Произошла ошибка!");
+                            }
+                        }
+                        /*
                         String afterDelay = readFromPort();
                         if (afterDelay.contains("exit-success")) {
                             System.out.println("EXIT GIGA SUCCESS");
@@ -104,6 +127,8 @@ public class SerialPortController {
                             }
                         }
 
+                         */
+
                     }
 
                 }
@@ -119,11 +144,67 @@ public class SerialPortController {
         }
     }
 
+    public void listenToPort() {
+        port.setBaudRate(9600);
+        port.openPort();
+        try {
+            while (port.isOpen()) {
+                String portData = readFromPort();
+                if (portData.contains("@Code")) {
+                    System.out.println("here");
+                    User user = movementService.sendSkudCardInfo(portData);
+
+                    if (user.id == 0) {
+                        System.out.println("here");
+                        writeToPort("@Code=user-not-found;@reader=exit");
+                        continue;
+                    }
+
+                    boolean exited = false;
+                    writeToPort("@Code=user-success;@reader=exit");
+                    // 350 * 10 = 3,5 секунды на проход,
+                    // ~80 - оптимальная задержка, при которой сначала закрывается турникет, а потом шлется сигнал
+                    // о неудачном проходе. Каждые 10 милисекунд прослушивается сериал порт
+                    for (int i=0; i < 350 + 80; i++) {
+                        String fromPort = readFromPort();
+                        if (fromPort.equals("exit-success")) {
+                            int returnCode = movementService.createMovementAction(portData);
+                            if (returnCode != 201) {
+                                System.out.println("Произошла ошибка!");
+                            }
+                            exited = true;
+                            break;
+                        }
+                        /*
+                        else if (fromPort.equals("exit-fail")) {
+                            System.out.println("giga fail");
+                            int returnCode = movementService.createFailMovementAction(portData);
+                            if (returnCode != 201) {
+                                System.out.println("Произошла ошибка!");
+                            }
+                            break;
+                        }
+
+                         */
+                        Thread.sleep(10);
+                    }
+                    if (!exited) {
+                        movementService.createFailMovementAction(portData);
+                    }
+
+                }
+            }
+        } catch (Exception e) {
+            port.closePort();
+            System.out.println("Произошла ошибка с считыванием с порта!");
+        }
+    }
+
     public void run() {
         this.thread = new Thread(() -> {
             // perform any operation
             System.out.println("Performing operation in Asynchronous Task");
-            listenPort();
+            listenToPort();
             System.out.println("Serial port ends!");
         });
         this.thread.start();
@@ -145,7 +226,7 @@ public class SerialPortController {
         if (numRead == 0) {
             return "";
         }
-        return new String(readBuffer, StandardCharsets.UTF_8);
+        return new String(readBuffer, StandardCharsets.UTF_8).trim();
     }
 
 
