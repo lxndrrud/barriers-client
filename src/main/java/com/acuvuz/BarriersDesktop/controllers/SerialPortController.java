@@ -4,6 +4,7 @@ import com.acuvuz.BarriersDesktop.JSONMappers.User;
 import com.acuvuz.BarriersDesktop.MainApplication;
 import com.acuvuz.BarriersDesktop.services.MovementService;
 import com.fazecast.jSerialComm.*;
+import io.github.cdimascio.dotenv.Dotenv;
 import javafx.fxml.FXML;
 
 import javax.swing.*;
@@ -12,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 
 public class SerialPortController {
     private static SerialPortController instance;
-    private MovementService movementService;
+    private final MovementService movementService;
     public static SerialPortController getInstance() {
         if (instance == null) {
             instance = new SerialPortController();
@@ -25,11 +26,12 @@ public class SerialPortController {
 
     private SerialPortController() {
         movementService = new MovementService();
-        loadSettings("/dev/ttyUSB2");
+        loadSettings();
     }
 
-    private void loadSettings(String portDescriptor) {
-        port = SerialPort.getCommPort(portDescriptor);
+    private void loadSettings() {
+        Dotenv dotenv = Dotenv.load();
+        port = SerialPort.getCommPort(dotenv.get("EXIT_PORT_PATH"));
     }
 
     public void closePort() {
@@ -151,11 +153,9 @@ public class SerialPortController {
             while (port.isOpen()) {
                 String portData = readFromPort();
                 if (portData.contains("@Code")) {
-                    System.out.println("here");
                     User user = movementService.sendSkudCardInfo(portData);
 
                     if (user.id == 0) {
-                        System.out.println("here");
                         writeToPort("@Code=user-not-found;@reader=exit");
                         continue;
                     }

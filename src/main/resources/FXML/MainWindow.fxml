@@ -12,41 +12,51 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="507.0" prefWidth="799.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.acuvuz.BarriersDesktop.controllers.MainController">
+<BorderPane prefHeight="824.0" prefWidth="1011.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.acuvuz.BarriersDesktop.controllers.MainController">
    <center>
       <TableView fx:id="movementsTableView" prefHeight="464.0" prefWidth="643.0" BorderPane.alignment="CENTER">
         <columns>
-            <TableColumn prefWidth="38.0" text="#">
+            <TableColumn prefWidth="29.0" text="#">
                 <cellValueFactory>
                     <PropertyValueFactory property="id" />
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn prefWidth="69.0" text="название события">
+            <TableColumn prefWidth="78.0" text="Название события">
                 <cellValueFactory>
                     <PropertyValueFactory property="event_name" />
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn prefWidth="69.0" text="номер события">
+            <TableColumn prefWidth="97.0" text="Название корпуса">
                 <cellValueFactory>
-                    <PropertyValueFactory property="id_event" />
+                    <PropertyValueFactory property="building_name" />
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn prefWidth="111.0" text="номер здания">
+            <TableColumn prefWidth="100.0" text="Имя">
                 <cellValueFactory>
-                    <PropertyValueFactory property="id_building" />
+                    <PropertyValueFactory property="firstname" />
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn prefWidth="81.0" text="номер работника">
+            <TableColumn prefWidth="88.0" text="Отчество">
                 <cellValueFactory>
-                    <PropertyValueFactory property="id_employee" />
+                    <PropertyValueFactory property="middlename" />
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn prefWidth="63.0" text="номер студента">
+            <TableColumn prefWidth="84.0" text="Фамилия">
+               <cellValueFactory>
+                  <PropertyValueFactory property="lastname" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn prefWidth="63.0" text="Тип">
                 <cellValueFactory>
-                    <PropertyValueFactory property="id_student" />
+                    <PropertyValueFactory property="type" />
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn prefWidth="82.0" text="время события">
+            <TableColumn prefWidth="130.0" text="Номер карты">
+               <cellValueFactory>
+                  <PropertyValueFactory property="skud_card" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn prefWidth="130.0" text="Время события">
                 <cellValueFactory>
                     <PropertyValueFactory property="event_timestamp" />
                 </cellValueFactory>
@@ -55,7 +65,7 @@
       </TableView>
    </center>
    <top>
-      <MenuBar prefHeight="43.0" prefWidth="271.0" BorderPane.alignment="CENTER">
+      <MenuBar prefHeight="43.0" prefWidth="893.0" BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="Все">
             <items>

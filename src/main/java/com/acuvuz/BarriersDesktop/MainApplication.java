@@ -15,7 +15,7 @@ public class MainApplication extends Application {
             SerialPortController portController = SerialPortController.getInstance();
             portController.run();
             FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/FXML/MainWindow.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 1000, 600);
+            Scene scene = new Scene(fxmlLoader.load(), 1600, 900);
             stage.setTitle("Турникеты ЛГПУ");
             stage.setScene(scene);
             stage.show();
