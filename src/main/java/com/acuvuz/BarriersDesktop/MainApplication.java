@@ -2,6 +2,7 @@ package com.acuvuz.BarriersDesktop;
 
 import java.io.IOException;
 
+import com.acuvuz.BarriersDesktop.controllers.MainController;
 import com.acuvuz.BarriersDesktop.controllers.SerialPortController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +20,7 @@ public class MainApplication extends Application {
             stage.setTitle("Турникеты ЛГПУ");
             stage.setScene(scene);
             stage.show();
+            ((MainController) fxmlLoader.getController()).setUpMonths();
         } catch (Exception e) {
             System.out.println(e);
             try {

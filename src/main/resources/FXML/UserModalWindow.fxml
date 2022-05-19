@@ -1,14 +1,215 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.acuvuz.BarriersDesktop.controllers.UserModalController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="641.0" prefWidth="782.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.acuvuz.BarriersDesktop.controllers.UserModalController">
+   <children>
+      <BorderPane layoutX="1.0" layoutY="1.0" prefHeight="641.0" prefWidth="782.0">
+         <center>
+            <TableView prefHeight="457.0" prefWidth="535.0" BorderPane.alignment="CENTER">
+              <columns>
+                <TableColumn prefWidth="63.0" text="#" />
+                <TableColumn prefWidth="148.0" text="Событие" />
+                  <TableColumn prefWidth="116.0" text="Здание" />
+                  <TableColumn prefWidth="169.0" text="Время события" />
+              </columns>
+            </TableView>
+         </center>
+         <top>
+            <VBox prefHeight="184.0" prefWidth="782.0" BorderPane.alignment="CENTER">
+               <children>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <center>
+                        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <GridPane>
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Label fx:id="firstnameLabel" alignment="CENTER" prefHeight="16.0" prefWidth="205.0" text="Имя" textAlignment="CENTER" GridPane.columnIndex="1" />
+                                    <Label fx:id="middlenameLabel" alignment="CENTER" prefHeight="16.0" prefWidth="205.0" text="Отчество" textAlignment="CENTER" GridPane.columnIndex="2" />
+                                    <Label fx:id="lastnameLabel" alignment="CENTER" prefHeight="16.0" prefWidth="205.0" text="Фамилия" textAlignment="CENTER" />
+                                    <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
+                                       <children>
+                                          <Label prefHeight="40.0" prefWidth="94.0" text="Сотрудник" />
+                                          <Label fx:id="employeeFlagLabel" prefHeight="31.0" prefWidth="105.0" text="Да/Нет" />
+                                       </children>
+                                    </HBox>
+                                    <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                       <children>
+                                          <Label prefHeight="40.0" prefWidth="94.0" text="Студент" />
+                                          <Label fx:id="studentFlagLabel" prefHeight="31.0" prefWidth="105.0" text="Да/Нет" />
+                                       </children>
+                                    </HBox>
+                                    <Accordion GridPane.rowIndex="2">
+                                      <panes>
+                                        <TitledPane animated="false" prefHeight="47.0" prefWidth="198.0" text="Должности">
+                                          <content>
+                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                          </content>
+                                        </TitledPane>
+                                      </panes>
+                                    </Accordion>
+                                    <Accordion GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                      <panes>
+                                        <TitledPane animated="false" text="Группы">
+                                          <content>
+                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                          </content>
+                                        </TitledPane>
+                                      </panes>
+                                    </Accordion>
+                                 </children>
+                              </GridPane>
+                           </children>
+                        </VBox>
+                     </center>
+                     <left>
+                        <VBox prefHeight="184.0" prefWidth="188.0" BorderPane.alignment="CENTER" />
+                     </left>
+                  </BorderPane>
+               </children>
+            </VBox>
+         </top>
+         <right>
+            <VBox prefHeight="457.0" prefWidth="285.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label prefHeight="25.0" prefWidth="192.0" text="Фильтр &quot;От&quot;" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="26.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="42.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <HBox GridPane.rowIndex="1">
+                           <children>
+                              <Spinner prefHeight="24.0" prefWidth="81.0" />
+                              <ComboBox prefHeight="24.0" prefWidth="83.0" />
+                              <Spinner layoutX="91.0" layoutY="10.0" prefHeight="24.0" prefWidth="102.0" />
+                           </children>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <Label alignment="CENTER" prefHeight="16.0" prefWidth="83.0" text="День" />
+                              <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="16.0" prefWidth="83.0" text="Месяц" />
+                              <Label alignment="CENTER" layoutX="93.0" layoutY="10.0" prefHeight="16.0" prefWidth="83.0" text="Год" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </GridPane>
+                  <GridPane layoutX="10.0" layoutY="35.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="26.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="42.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <HBox GridPane.rowIndex="1">
+                           <children>
+                              <Spinner prefHeight="24.0" prefWidth="87.0" />
+                              <Separator prefHeight="11.0" prefWidth="51.0" />
+                              <Spinner layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="90.0" />
+                           </children>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <Label alignment="CENTER" prefHeight="16.0" prefWidth="83.0" text="Час" />
+                              <Separator prefHeight="11.0" prefWidth="57.0" />
+                              <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="16.0" prefWidth="83.0" text="Минута" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </GridPane>
+                  <Label layoutX="10.0" layoutY="10.0" prefHeight="25.0" prefWidth="192.0" text="Фильтр &quot;До&quot;" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="26.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="42.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <HBox GridPane.rowIndex="1">
+                           <children>
+                              <Spinner prefHeight="24.0" prefWidth="81.0" />
+                              <ComboBox prefHeight="24.0" prefWidth="83.0" />
+                              <Spinner layoutX="91.0" layoutY="10.0" prefHeight="24.0" prefWidth="102.0" />
+                           </children>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <Label alignment="CENTER" prefHeight="16.0" prefWidth="83.0" text="День" />
+                              <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="16.0" prefWidth="83.0" text="Месяц" />
+                              <Label alignment="CENTER" layoutX="93.0" layoutY="10.0" prefHeight="16.0" prefWidth="83.0" text="Год" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </GridPane>
+                  <GridPane layoutX="10.0" layoutY="89.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="26.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="42.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <HBox GridPane.rowIndex="1">
+                           <children>
+                              <Spinner prefHeight="24.0" prefWidth="87.0" />
+                              <Separator prefHeight="11.0" prefWidth="51.0" />
+                              <Spinner layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="90.0" />
+                           </children>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <Label alignment="CENTER" prefHeight="16.0" prefWidth="83.0" text="Час" />
+                              <Separator prefHeight="11.0" prefWidth="57.0" />
+                              <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="16.0" prefWidth="83.0" text="Минута" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </GridPane>
+               </children>
+            </VBox>
+         </right>
+      </BorderPane>
+   </children>
 </AnchorPane>
