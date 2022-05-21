@@ -20,7 +20,6 @@ public class MainApplication extends Application {
             stage.setTitle("Турникеты ЛГПУ");
             stage.setScene(scene);
             stage.show();
-            ((MainController) fxmlLoader.getController()).setUpMonths();
         } catch (Exception e) {
             System.out.println(e);
             try {
