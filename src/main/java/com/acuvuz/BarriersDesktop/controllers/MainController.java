@@ -48,81 +48,52 @@ public class MainController {
         alert.setContentText(content);
         alert.showAndWait();
     }
-    public ArrayList<String> parseMovementInterval() {
-        LocalDate fromLocalDate = fromDate.getValue();
-        LocalDate toLocalDate = toDate.getValue();
 
-        String fromString = "";
-        String toString = "";
+    public String parseMovementIntervalFromElements(DatePicker datePicker, TextField hourField, TextField minuteField) {
+        LocalDate localDate = datePicker.getValue();
+        String resultString = "";
 
-        if (fromLocalDate != null) {
-            fromString = fromLocalDate.getDayOfMonth() + "." +
-                    fromLocalDate.getMonthValue() + "." +
-                    fromLocalDate.getYear() + "T";
+        if (localDate != null) {
+            resultString = localDate.getDayOfMonth() + "." +
+                    localDate.getMonthValue() + "." +
+                    localDate.getYear() + "T";
         }
         else {
-            fromString =  new SimpleDateFormat("dd.MM.yyyy").format(Timestamp.from(Instant.now())) + "T";
+            resultString =  new SimpleDateFormat("dd.MM.yyyy").format(Timestamp.from(Instant.now())) + "T";
         }
 
-
-
-        if (fromHour.getText().length() != 0) {
-            if (fromHour.getText().matches("\\D")) {
+        if (hourField.getText().length() != 0) {
+            if (hourField.getText().matches("\\D")) {
                 createAlertModalWindow("Ошибка!", "Ошибка в поле часов фильтра 'От'!",
                         "Вы ввели нечисловое значение!");
             }
 
-            fromString += fromHour.getText() + ":";
+            resultString += fromHour.getText() + ":";
         }
         else {
-            fromString += new SimpleDateFormat("HH").format(Timestamp.from(Instant.now())) + ":";
+            resultString += new SimpleDateFormat("HH").format(Timestamp.from(Instant.now())) + ":";
 
         }
-        if (fromMinute.getText().length() != 0) {
-            if (fromMinute.getText().matches("\\D")) {
+
+        if (minuteField.getText().length() != 0) {
+            if (minuteField.getText().matches("\\D")) {
                 createAlertModalWindow("Ошибка!", "Ошибка в поле минут фильтра 'От'!",
                         "Вы ввели нечисловое значение!");
             }
 
-            fromString += fromMinute.getText().toString();
+            resultString += minuteField.getText().toString();
         }
         else {
-            fromString += new SimpleDateFormat("mm").format(Timestamp.from(Instant.now()));
+            resultString += new SimpleDateFormat("mm").format(Timestamp.from(Instant.now()));
         }
 
-        if (toLocalDate != null) {
-            toString = toLocalDate.getDayOfMonth() + "." +
-                    toLocalDate.getMonthValue() + "." +
-                    toLocalDate.getYear() + "T";
-        }
-        else {
-            toString =  new SimpleDateFormat("dd.MM.yyyy").format(Timestamp.from(Instant.now())) + "T";
-        }
 
-        if (toHour.getText().length() != 0) {
-            if (toHour.getText().matches("\\D")) {
-                createAlertModalWindow("Ошибка!", "Ошибка в поле часов фильтра 'До'!",
-                        "Вы ввели нечисловое значение!");
-            }
+        return resultString;
+    }
+    public ArrayList<String> parseMovementInterval() {
 
-            toString += toHour.getText().toString();
-        } else {
-            toString += new SimpleDateFormat("HH").format(Timestamp.from(Instant.now())) + ":";
-
-        }
-
-        if (toMinute.getText().length() != 0) {
-            if (toMinute.getText().matches("\\D")) {
-                createAlertModalWindow("Ошибка!", "Ошибка в поле минут фильтра 'До'!",
-                        "Вы ввели нечисловое значение!");
-            }
-
-            toString += toMinute.getText().toString();
-        }
-        else {
-            toString += new SimpleDateFormat("mm").format(Timestamp.from(Instant.now()));
-
-        }
+        String fromString = parseMovementIntervalFromElements(fromDate, fromHour, fromMinute);
+        String toString =  parseMovementIntervalFromElements(toDate, toHour, toMinute);
 
         var result = new ArrayList<String>();
         result.add(fromString);

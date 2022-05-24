@@ -130,12 +130,95 @@ public class MovementService {
 
             client.close();
             int returnCode = response.getStatusLine().getStatusCode();
+
             return returnCode;
         } catch (Exception e ) {
             System.out.println("Ошибка при запросе на сервер");
             return 500;
         }
     }
+
+    private String getEmployeeMovementsEndpoint() {
+        return "/movements/employee";
+    }
+
+    private int getStudentInfoAndMovements(Movement movement, String from, String to) {
+        var client = HttpClientBuilder.create().build();
+        try {
+            HttpGet httpGet = new HttpGet(this.root.getHost() + "/movements/student");
+            URI uri = new URIBuilder(httpGet.getURI())
+                    .addParameter("id_student", Integer.toString(movement.id_student))
+                    .addParameter("from", from)
+                    .addParameter("to", to)
+                    .build();
+            httpGet.setURI(uri);
+            HttpResponse response = client.execute(httpGet);
+
+            client.close();
+            int returnCode = response.getStatusLine().getStatusCode();
+            String data = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+            if (returnCode == 200) {
+                Gson gson = new Gson();
+                // Пропарсить сущность и вернуть её
+                User user = gson.fromJson(data, User.class);
+                client.close();
+                return returnCode;
+            }
+            return returnCode;
+        } catch (Exception e) {
+            System.out.println("Ошибка при запросе на сервер");
+            return 500;
+        }
+    }
+
+    private int getEmployeeInfoAndMovements(Movement movement, String from, String to) {
+        var client = HttpClientBuilder.create().build();
+        try {
+            HttpGet httpGet = new HttpGet(this.root.getHost() + "/movements/employee");
+            URI uri = new URIBuilder(httpGet.getURI())
+                    .addParameter("id_student", Integer.toString(movement.id_student))
+                    .addParameter("from", from)
+                    .addParameter("to", to)
+                    .build();
+            httpGet.setURI(uri);
+            HttpResponse response = client.execute(httpGet);
+
+            client.close();
+            int returnCode = response.getStatusLine().getStatusCode();
+            String data = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+            if (returnCode == 200) {
+                Gson gson = new Gson();
+                // Пропарсить сущность и вернуть её
+                User user = gson.fromJson(data, User.class);
+                client.close();
+                return returnCode;
+            }
+            return returnCode;
+        } catch (Exception e) {
+            System.out.println("Ошибка при запросе на сервер");
+            return 500;
+        }
+    }
+
+    private int sendPersonalMovementsRequest(Movement movement, String from, String to) {
+        try {
+            int returnCode;
+            if (movement.id_employee != 0)
+                returnCode = getStudentInfoAndMovements(movement, from, to);
+            else if (movement.id_student != 0)
+                returnCode = getEmployeeInfoAndMovements(movement, from, to);
+            else
+                returnCode = 0;
+
+
+            return returnCode;
+        } catch (Exception e ) {
+            System.out.println("Ошибка при запросе на сервер");
+            return 500;
+        }
+    }
+
+
 
 
 }
