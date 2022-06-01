@@ -1,6 +1,6 @@
 package com.acuvuz.BarriersDesktop.controllers;
 
-import com.acuvuz.BarriersDesktop.JSONMappers.Movement;
+import com.acuvuz.BarriersDesktop.JSONMappers.MovementWithUser;
 import com.acuvuz.BarriersDesktop.MainApplication;
 import com.acuvuz.BarriersDesktop.services.MovementService;
 import javafx.collections.FXCollections;
@@ -14,12 +14,8 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.Month;
-import javafx.util.converter.NumberStringConverter;
 
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class MainController {
     public Button updateButton;
@@ -105,10 +101,10 @@ public class MainController {
 
     public void onUpdateButtonClick() {
         var datesArray = parseMovementInterval();
-        Movement[] movements = this.movementService.getAll(datesArray.get(0), datesArray.get(1));
+        MovementWithUser[] movementWithUsers = this.movementService.getAll(datesArray.get(0), datesArray.get(1));
         //var movementList = movementsTableView.getItems();
         movementsTableView.getItems().removeAll();
-        ObservableList<Movement> movementsList = FXCollections.observableArrayList(movements);
+        ObservableList<MovementWithUser> movementsList = FXCollections.observableArrayList(movementWithUsers);
         movementsTableView.setItems(movementsList);
     }
 

@@ -5,6 +5,5 @@ public class User {
     public String firstname;
     public String middlename;
     public String lastname;
-    public String type;
     public String skud_card;
 }

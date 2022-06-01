@@ -1,17 +1,16 @@
 package com.acuvuz.BarriersDesktop.services;
 
-import com.acuvuz.BarriersDesktop.JSONMappers.Movement;
+import com.acuvuz.BarriersDesktop.JSONMappers.Employee;
+import com.acuvuz.BarriersDesktop.JSONMappers.MovementWithUser;
+import com.acuvuz.BarriersDesktop.JSONMappers.Student;
 import com.acuvuz.BarriersDesktop.JSONMappers.User;
 import com.google.gson.Gson;
-import com.sun.net.httpserver.Request;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -30,7 +29,7 @@ public class MovementService {
         this.root = new RootService();
     }
 
-    public Movement[] getAll(String from, String to) {
+    public MovementWithUser[] getAll(String from, String to) {
         var link = this.root.getHost() + "/movements";
 
         try {
@@ -46,15 +45,15 @@ public class MovementService {
             if (response.getStatusLine().getStatusCode() == 200) {
                 String data = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
                 Gson gson = new Gson();
-                Movement[] result = gson.fromJson(data, Movement[].class);
+                MovementWithUser[] result = gson.fromJson(data, MovementWithUser[].class);
                 client.close();
                 return result;
             } else {
                 client.close();
-                return new Movement[]{};
+                return new MovementWithUser[]{};
             }
         } catch (Exception e ) {
-            return new Movement[]{};
+            return new MovementWithUser[]{};
         }
     }
 
@@ -138,18 +137,12 @@ public class MovementService {
         }
     }
 
-    private String getEmployeeMovementsEndpoint() {
-        return "/movements/employee";
-    }
-
-    private int getStudentInfoAndMovements(Movement movement, String from, String to) {
+    private Student getStudentInfo(int id_student) throws Exception {
         var client = HttpClientBuilder.create().build();
         try {
-            HttpGet httpGet = new HttpGet(this.root.getHost() + "/movements/student");
+            HttpGet httpGet = new HttpGet(this.root.getHost() + "/users/student");
             URI uri = new URIBuilder(httpGet.getURI())
-                    .addParameter("id_student", Integer.toString(movement.id_student))
-                    .addParameter("from", from)
-                    .addParameter("to", to)
+                    .addParameter("id_student", Integer.toString(id_student))
                     .build();
             httpGet.setURI(uri);
             HttpResponse response = client.execute(httpGet);
@@ -160,25 +153,26 @@ public class MovementService {
             if (returnCode == 200) {
                 Gson gson = new Gson();
                 // Пропарсить сущность и вернуть её
-                User user = gson.fromJson(data, User.class);
+                Student student = gson.fromJson(data, Student.class);
                 client.close();
-                return returnCode;
+                return student;
             }
-            return returnCode;
+            else {
+                throw new Exception(response.getStatusLine().getStatusCode()
+                        + response.getStatusLine().getReasonPhrase());
+            }
         } catch (Exception e) {
             System.out.println("Ошибка при запросе на сервер");
-            return 500;
+            throw e;
         }
     }
 
-    private int getEmployeeInfoAndMovements(Movement movement, String from, String to) {
+    private Employee getEmployeeInfo(int id_employee) throws Exception {
         var client = HttpClientBuilder.create().build();
         try {
-            HttpGet httpGet = new HttpGet(this.root.getHost() + "/movements/employee");
+            HttpGet httpGet = new HttpGet(this.root.getHost() + "/users/employee");
             URI uri = new URIBuilder(httpGet.getURI())
-                    .addParameter("id_student", Integer.toString(movement.id_student))
-                    .addParameter("from", from)
-                    .addParameter("to", to)
+                    .addParameter("id_employee", Integer.toString(id_employee))
                     .build();
             httpGet.setURI(uri);
             HttpResponse response = client.execute(httpGet);
@@ -189,24 +183,80 @@ public class MovementService {
             if (returnCode == 200) {
                 Gson gson = new Gson();
                 // Пропарсить сущность и вернуть её
-                User user = gson.fromJson(data, User.class);
+                Employee employee = gson.fromJson(data, Employee.class);
                 client.close();
-                return returnCode;
+                return employee;
             }
-            return returnCode;
+            else {
+                throw new Exception(response.getStatusLine().getStatusCode()
+                        + response.getStatusLine().getReasonPhrase());
+            }
         } catch (Exception e) {
             System.out.println("Ошибка при запросе на сервер");
-            return 500;
+            throw e;
         }
     }
 
-    private int sendPersonalMovementsRequest(Movement movement, String from, String to) {
+    private int getEmployeeInfoAndMovements(int id_employee, String from, String to) {
+        try {
+            getEmployeeInfo(id_employee);
+            return 0;
+        } catch (Exception e ) {
+            System.out.println(e);
+            return 1;
+        }
+    }
+
+    private int getStudentInfoAndMovements(int id_student, String from, String to) {
+        try {
+            getStudentInfo(id_student);
+            return 0;
+        } catch (Exception e ) {
+            System.out.println(e);
+            return 1;
+        }
+    }
+
+    public static void main(String[] args) {
+        var movements = new MovementService();
+        try {
+            var result1 = movements.getStudentInfo(1);
+            System.out.println(result1.student.firstname);
+            System.out.println(result1.student.middlename);
+            System.out.println(result1.student.lastname);
+            System.out.println(result1.student.skud_card);
+            for (var item: result1.groups) {
+                System.out.println(item.id);
+                System.out.println(item.title);
+                System.out.println(item.department_title);
+            }
+
+            var result2 = movements.getEmployeeInfo(1);
+            System.out.println(result2.employee.firstname);
+            System.out.println(result2.employee.middlename);
+            System.out.println(result2.employee.lastname);
+            System.out.println(result2.employee.skud_card);
+            for (var item: result2.positions) {
+                System.out.println(item.id);
+                System.out.println(item.title);
+                System.out.println(item.department_title);
+                System.out.println(item.date_drop);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Обосрался!");
+        }
+    }
+
+
+
+    private int sendPersonalMovementsRequest(MovementWithUser movementWithUser, String from, String to) {
         try {
             int returnCode;
-            if (movement.id_employee != 0)
-                returnCode = getStudentInfoAndMovements(movement, from, to);
-            else if (movement.id_student != 0)
-                returnCode = getEmployeeInfoAndMovements(movement, from, to);
+            if (movementWithUser.id_employee != 0)
+                returnCode = getEmployeeInfoAndMovements(movementWithUser.id_employee, from, to);
+            else if (movementWithUser.id_student != 0)
+                returnCode = getStudentInfoAndMovements(movementWithUser.id_student, from, to);
             else
                 returnCode = 0;
 
