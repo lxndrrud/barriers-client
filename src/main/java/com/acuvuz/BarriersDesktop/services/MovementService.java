@@ -1,9 +1,6 @@
 package com.acuvuz.BarriersDesktop.services;
 
-import com.acuvuz.BarriersDesktop.JSONMappers.Employee;
-import com.acuvuz.BarriersDesktop.JSONMappers.MovementWithUser;
-import com.acuvuz.BarriersDesktop.JSONMappers.Student;
-import com.acuvuz.BarriersDesktop.JSONMappers.User;
+import com.acuvuz.BarriersDesktop.JSONMappers.*;
 import com.google.gson.Gson;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -137,7 +134,7 @@ public class MovementService {
         }
     }
 
-    private Student getStudentInfo(int id_student) throws Exception {
+    public Student getStudentInfo(int id_student) throws Exception {
         var client = HttpClientBuilder.create().build();
         try {
             HttpGet httpGet = new HttpGet(this.root.getHost() + "/users/student");
@@ -167,7 +164,7 @@ public class MovementService {
         }
     }
 
-    private Employee getEmployeeInfo(int id_employee) throws Exception {
+    public Employee getEmployeeInfo(int id_employee) throws Exception {
         var client = HttpClientBuilder.create().build();
         try {
             HttpGet httpGet = new HttpGet(this.root.getHost() + "/users/employee");
@@ -197,6 +194,50 @@ public class MovementService {
         }
     }
 
+    public Movement[] getMovementsForUser(MovementWithUser movement, String from, String to) throws Exception {
+        var client = HttpClientBuilder.create().build();
+        try {
+            HttpGet httpGet = new HttpGet(this.root.getHost() + "/movements/user");
+            var uriBuilder = new URIBuilder(httpGet.getURI());
+            if (movement.id_student != 0) {
+                uriBuilder
+                        .addParameter("id_student", Integer.toString(movement.id_student))
+                        .addParameter("from", from)
+                        .addParameter("to", to)
+                        .build();
+            }
+            else if (movement.id_employee != 0) {
+                uriBuilder
+                        .addParameter("id_employee", Integer.toString(movement.id_employee))
+                        .addParameter("from", from)
+                        .addParameter("to", to)
+                        .build();
+            }
+
+            httpGet.setURI(uriBuilder.build());
+            HttpResponse response = client.execute(httpGet);
+
+            client.close();
+            int returnCode = response.getStatusLine().getStatusCode();
+            String data = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+            if (returnCode == 200) {
+                Gson gson = new Gson();
+                // Пропарсить сущность и вернуть её
+                Movement[] movements = gson.fromJson(data, Movement[].class);
+                client.close();
+                return movements;
+            }
+            else {
+                throw new Exception(response.getStatusLine().getStatusCode()
+                        + response.getStatusLine().getReasonPhrase());
+            }
+        } catch (Exception e) {
+            System.out.println("Ошибка при запросе на сервер");
+            throw e;
+        }
+    }
+
+    /*
     private int getEmployeeInfoAndMovements(int id_employee, String from, String to) {
         try {
             getEmployeeInfo(id_employee);
@@ -216,6 +257,8 @@ public class MovementService {
             return 1;
         }
     }
+
+     */
 
     public static void main(String[] args) {
         var movements = new MovementService();
@@ -243,6 +286,23 @@ public class MovementService {
                 System.out.println(item.date_drop);
             }
 
+            var all = movements.getAll("14.04.2022T15:00", "");
+
+            int i=0;
+            for (var move: all) {
+                var get = movements.getMovementsForUser(move, "14.04.2022T15:00", "");
+                for (var getted: get) {
+                    System.out.println(getted.building_name);
+                    System.out.println(getted.event_name);
+                    System.out.println(getted.event_timestamp);
+                    System.out.println(getted.id_student);
+                    System.out.println(getted.id_employee);
+                    System.out.println("");
+                    System.out.println("");
+                }
+            }
+
+
         } catch (Exception e) {
             System.out.println("Обосрался!");
         }
@@ -250,21 +310,22 @@ public class MovementService {
 
 
 
-    private int sendPersonalMovementsRequest(MovementWithUser movementWithUser, String from, String to) {
+    private void sendPersonalMovementsRequest(MovementWithUser movementWithUser, String from, String to) {
         try {
-            int returnCode;
-            if (movementWithUser.id_employee != 0)
-                returnCode = getEmployeeInfoAndMovements(movementWithUser.id_employee, from, to);
-            else if (movementWithUser.id_student != 0)
-                returnCode = getStudentInfoAndMovements(movementWithUser.id_student, from, to);
-            else
-                returnCode = 0;
+            if (movementWithUser.id_employee != 0) {
+                var employeeInfo = getEmployeeInfo(movementWithUser.id_employee);
+                //getEmployeeInfoAndMovements(movementWithUser.id_employee, from, to);
+
+            }
+            else if (movementWithUser.id_student != 0) {
+                var studentInfo = getStudentInfo(movementWithUser.id_student);
+                //returnCode = getStudentInfoAndMovements(movementWithUser.id_student, from, to);
+            }
+            var movements = getMovementsForUser(movementWithUser, from, to);
 
 
-            return returnCode;
         } catch (Exception e ) {
             System.out.println("Ошибка при запросе на сервер");
-            return 500;
         }
     }
 

@@ -9,4 +9,20 @@ public class Movement {
     public String event_name;
     public int id_student;
     public int id_employee;
+
+    public int getId() {
+        return id;
+    }
+
+    public String getBuilding_name() {
+        return building_name;
+    }
+
+    public String getEvent_name() {
+        return event_name;
+    }
+
+    public String getEvent_timestamp() {
+        return event_timestamp;
+    }
 }

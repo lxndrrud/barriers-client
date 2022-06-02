@@ -3,9 +3,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -71,27 +68,6 @@
         </columns>
       </TableView>
    </center>
-   <top>
-      <MenuBar prefHeight="43.0" prefWidth="1072.0" BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="Все">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Сотрудники">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Студенты">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-   </top>
    <right>
       <VBox prefHeight="781.0" prefWidth="289.0" BorderPane.alignment="CENTER">
          <children>
@@ -145,8 +121,8 @@
                      <children>
                         <HBox GridPane.rowIndex="1">
                            <children>
-                              <TextField fx:id="toHour" prefHeight="24.0" prefWidth="84.0"/>
-                              <Separator prefHeight="11.0" prefWidth="51.0" />
+                              <TextField fx:id="toHour" prefHeight="24.0" prefWidth="84.0" />
+                              <Separator prefHeight="11.0" prefWidth="57.0" />
                               <TextField fx:id="toMinute" layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="84.0" />
                            </children>
                         </HBox>
@@ -161,8 +137,6 @@
                   </GridPane>
                </children>
             </VBox>
-            <TextField fx:id="fromTextField" promptText="Время &quot;От&quot;" />
-            <TextField fx:id="toTextField" promptText="Время &quot;До&quot;" />
             <Button fx:id="updateButton" mnemonicParsing="false" onAction="#onUpdateButtonClick" prefHeight="24.0" prefWidth="290.0" text="Обновить список" />
             <Button fx:id="personalMovementsButton" mnemonicParsing="false" onAction="#onPersonalMovementsButtonClick" prefHeight="24.0" prefWidth="293.0" text="Перемещения на человека" />
             <Separator orientation="VERTICAL" prefHeight="32.0" prefWidth="0.0" />

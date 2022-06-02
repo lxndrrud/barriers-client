@@ -1,8 +1,12 @@
 package com.acuvuz.BarriersDesktop.controllers;
 
+import com.acuvuz.BarriersDesktop.JSONMappers.Employee;
+import com.acuvuz.BarriersDesktop.JSONMappers.Movement;
 import com.acuvuz.BarriersDesktop.JSONMappers.MovementWithUser;
+import com.acuvuz.BarriersDesktop.JSONMappers.Student;
 import com.acuvuz.BarriersDesktop.MainApplication;
 import com.acuvuz.BarriersDesktop.services.MovementService;
+import com.acuvuz.BarriersDesktop.utils.DateTimeParser;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -10,19 +14,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-
-import java.util.ArrayList;
 
 public class MainController {
     public Button updateButton;
     public Button personalMovementsButton;
-    public TextField fromTextField;
-    public TextField toTextField;
-
     public DatePicker fromDate;
     public TextField fromHour;
     public TextField fromMinute;
@@ -37,70 +32,12 @@ public class MainController {
     private final MovementService movementService;
     private final SerialPortController portController;
 
-    public void createAlertModalWindow(String title, String header, String content) {
-        var alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
-    public String parseMovementIntervalFromElements(DatePicker datePicker, TextField hourField, TextField minuteField) {
-        LocalDate localDate = datePicker.getValue();
-        String resultString = "";
-
-        if (localDate != null) {
-            resultString = localDate.getDayOfMonth() + "." +
-                    localDate.getMonthValue() + "." +
-                    localDate.getYear() + "T";
-        }
-        else {
-            resultString =  new SimpleDateFormat("dd.MM.yyyy").format(Timestamp.from(Instant.now())) + "T";
-        }
-
-        if (hourField.getText().length() != 0) {
-            if (hourField.getText().matches("\\D")) {
-                createAlertModalWindow("Ошибка!", "Ошибка в поле часов фильтра 'От'!",
-                        "Вы ввели нечисловое значение!");
-            }
-
-            resultString += fromHour.getText() + ":";
-        }
-        else {
-            resultString += new SimpleDateFormat("HH").format(Timestamp.from(Instant.now())) + ":";
-
-        }
-
-        if (minuteField.getText().length() != 0) {
-            if (minuteField.getText().matches("\\D")) {
-                createAlertModalWindow("Ошибка!", "Ошибка в поле минут фильтра 'От'!",
-                        "Вы ввели нечисловое значение!");
-            }
-
-            resultString += minuteField.getText().toString();
-        }
-        else {
-            resultString += new SimpleDateFormat("mm").format(Timestamp.from(Instant.now()));
-        }
-
-
-        return resultString;
-    }
-    public ArrayList<String> parseMovementInterval() {
-
-        String fromString = parseMovementIntervalFromElements(fromDate, fromHour, fromMinute);
-        String toString =  parseMovementIntervalFromElements(toDate, toHour, toMinute);
-
-        var result = new ArrayList<String>();
-        result.add(fromString);
-        result.add(toString);
-
-        return result;
-    }
-
 
     public void onUpdateButtonClick() {
-        var datesArray = parseMovementInterval();
+        var datesArray = DateTimeParser.parseMovementInterval(
+                fromDate, fromHour, fromMinute,
+                toDate, toHour, toMinute
+        );
         MovementWithUser[] movementWithUsers = this.movementService.getAll(datesArray.get(0), datesArray.get(1));
         //var movementList = movementsTableView.getItems();
         movementsTableView.getItems().removeAll();
@@ -114,8 +51,27 @@ public class MainController {
 
     public void onPersonalMovementsButtonClick() {
         try {
+            var datesArray = DateTimeParser.parseMovementInterval(
+                    fromDate, fromHour, fromMinute,
+                    toDate, toHour, toMinute
+            );
+
+            Student student = null;
+            Employee employee = null;
+            Movement[] movements = null;
+            var selectedMovement = (MovementWithUser) movementsTableView.getSelectionModel()
+                    .getSelectedItem();
+            if (selectedMovement.id_student != 0 ) {
+                student = movementService.getStudentInfo(selectedMovement.id_student);
+            }
+            else if (selectedMovement.id_employee != 0) {
+                employee = movementService.getEmployeeInfo(selectedMovement.id_employee);
+            }
+            movements = movementService.getMovementsForUser(selectedMovement,
+                    datesArray.get(0), datesArray.get(1));
             // Load the fxml file and create a new stage for the popup dialog.
-            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("/FXML/UserModalWindow.fxml"));
+            FXMLLoader loader = new FXMLLoader(MainApplication.class
+                    .getResource("/FXML/UserModalWindow.fxml"));
             //AnchorPane page = (AnchorPane) loader.load();
             Stage modalStage = new Stage();
 
@@ -123,6 +79,17 @@ public class MainController {
             Scene scene = new Scene(loader.load(), 800, 600);
             modalStage.setTitle("Информация о человеке");
             modalStage.setScene(scene);
+
+            var controller = (UserModalController) loader.getController();
+
+            if (student != null) {
+                controller.setStudent(student);
+            }
+            else if (employee != null) {
+                controller.setEmployee(employee);
+            }
+
+            controller.setMovements(movements);
             modalStage.showAndWait();
         } catch (Exception e) {
             System.out.println(e);
