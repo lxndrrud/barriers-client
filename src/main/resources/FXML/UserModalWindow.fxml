@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -17,7 +17,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 
 <BorderPane prefHeight="641.0" prefWidth="782.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.acuvuz.BarriersDesktop.controllers.UserModalController">
    <center>
@@ -53,62 +52,38 @@
                <center>
                   <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                      <children>
-                        <GridPane>
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
+                        <HBox prefHeight="35.0" prefWidth="594.0">
                            <children>
-                              <Label fx:id="firstnameLabel" alignment="CENTER" prefHeight="16.0" prefWidth="205.0" text="Имя" textAlignment="CENTER" GridPane.columnIndex="1" />
-                              <Label fx:id="middlenameLabel" alignment="CENTER" prefHeight="16.0" prefWidth="205.0" text="Отчество" textAlignment="CENTER" GridPane.columnIndex="2" />
-                              <Label fx:id="lastnameLabel" alignment="CENTER" prefHeight="16.0" prefWidth="205.0" text="Фамилия" textAlignment="CENTER" />
-                              <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
-                                 <children>
-                                    <Label prefHeight="30.0" prefWidth="71.0" text="Карта:" />
-                                    <Label fx:id="cardLabel" prefHeight="30.0" prefWidth="138.0" text="Номер карты" />
-                                 </children>
-                              </HBox>
+                              <Label prefHeight="38.0" prefWidth="59.0" text="ФИО:" />
+                              <TextField fx:id="fullnameTextField" editable="false" prefHeight="34.0" prefWidth="207.0" />
                            </children>
-                        </GridPane>
-                        <VBox prefHeight="80.0" prefWidth="594.0">
+                        </HBox>
+                        <HBox prefHeight="35.0" prefWidth="594.0">
                            <children>
-                              <HBox prefHeight="100.0" prefWidth="200.0">
-                                 <children>
-                                    <HBox prefHeight="40.0" prefWidth="282.0">
-                                       <children>
-                                          <Label prefHeight="29.0" prefWidth="94.0" text="Сотрудник:" />
-                                          <Label fx:id="employeeFlagLabel" prefHeight="31.0" prefWidth="105.0" text="Да/Нет" />
-                                       </children>
-                                    </HBox>
-                                    <HBox prefHeight="100.0" prefWidth="200.0">
-                                       <children>
-                                          <Label prefHeight="31.0" prefWidth="94.0" text="Студент:" />
-                                          <Label fx:id="studentFlagLabel" prefHeight="31.0" prefWidth="105.0" text="Да/Нет" />
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </HBox>
-                              <HBox prefHeight="100.0" prefWidth="594.0">
-                                 <children>
-                                  <TitledPane fx:id="positionsPane" animated="false" expanded="false" prefHeight="66.0" prefWidth="281.0" text="Должности" wrapText="true">
-                                    <content>
-                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="22.0" prefWidth="279.0" />
-                                    </content>
-                                  </TitledPane>
-                                  <TitledPane fx:id="groupsPane" animated="false" expanded="false" prefHeight="99.0" prefWidth="315.0" text="Группы">
-                                    <content>
-                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                    </content>
-                                  </TitledPane>
-                                 </children>
-                              </HBox>
+                              <Label prefHeight="38.0" prefWidth="59.0" text="Карта:" />
+                              <TextField fx:id="cardTextField" editable="false" prefHeight="34.0" prefWidth="207.0" />
                            </children>
-                        </VBox>
+                        </HBox>
+                        <HBox prefHeight="42.0" prefWidth="594.0">
+                           <children>
+                              <Label prefHeight="35.0" prefWidth="59.0" text="Тип:" />
+                              <TextField fx:id="typeTextField" editable="false" prefHeight="34.0" prefWidth="207.0" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="594.0">
+                           <children>
+                            <TitledPane fx:id="positionsPane" animated="false" expanded="false" prefHeight="97.0" prefWidth="280.0" text="Должности" wrapText="true">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="22.0" prefWidth="279.0" />
+                              </content>
+                            </TitledPane>
+                            <TitledPane fx:id="groupsPane" animated="false" expanded="false" prefHeight="99.0" prefWidth="315.0" text="Группы">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                              </content>
+                            </TitledPane>
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                </center>
@@ -124,7 +99,7 @@
          <children>
             <Label prefHeight="25.0" prefWidth="192.0" text="Фильтр &quot;От&quot;" textAlignment="CENTER">
                <font>
-                  <Font name="System Bold" size="13.0" />
+                  <Font name="System Bold" size="16.0" />
                </font>
             </Label>
             <DatePicker fx:id="fromDate" prefHeight="24.0" prefWidth="228.0" />
@@ -140,22 +115,26 @@
                   <HBox GridPane.rowIndex="1">
                      <children>
                         <TextField fx:id="fromHour" prefHeight="24.0" prefWidth="84.0" />
-                        <Separator prefHeight="11.0" prefWidth="58.0" />
-                        <TextField fx:id="fromMinute" layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="84.0" />
+                        <TextField fx:id="fromMinute" layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="84.0">
+                           <HBox.margin>
+                              <Insets left="58.0" />
+                           </HBox.margin></TextField>
                      </children>
                   </HBox>
                   <HBox>
                      <children>
                         <Label alignment="CENTER" prefHeight="16.0" prefWidth="83.0" text="Час" />
-                        <Separator prefHeight="11.0" prefWidth="57.0" />
-                        <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="16.0" prefWidth="83.0" text="Минута" />
+                        <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="16.0" prefWidth="83.0" text="Минута">
+                           <HBox.margin>
+                              <Insets left="58.0" />
+                           </HBox.margin></Label>
                      </children>
                   </HBox>
                </children>
             </GridPane>
             <Label layoutX="10.0" layoutY="10.0" prefHeight="25.0" prefWidth="192.0" text="Фильтр &quot;До&quot;" textAlignment="CENTER">
                <font>
-                  <Font name="System Bold" size="13.0" />
+                  <Font name="System Bold" size="16.0" />
                </font>
             </Label>
             <DatePicker fx:id="toDate" prefHeight="24.0" prefWidth="228.0" />
@@ -171,21 +150,28 @@
                   <HBox GridPane.rowIndex="1">
                      <children>
                         <TextField fx:id="toHour" prefHeight="24.0" prefWidth="84.0" />
-                        <Separator prefHeight="11.0" prefWidth="56.0" />
-                        <TextField fx:id="toMinute" layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="84.0" />
+                        <TextField fx:id="toMinute" layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="84.0">
+                           <HBox.margin>
+                              <Insets left="58.0" />
+                           </HBox.margin></TextField>
                      </children>
                   </HBox>
                   <HBox>
                      <children>
                         <Label alignment="CENTER" prefHeight="16.0" prefWidth="83.0" text="Час" />
-                        <Separator prefHeight="11.0" prefWidth="57.0" />
-                        <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="16.0" prefWidth="83.0" text="Минута" />
+                        <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="16.0" prefWidth="83.0" text="Минута">
+                           <HBox.margin>
+                              <Insets left="58.0" />
+                           </HBox.margin></Label>
                      </children>
                   </HBox>
                </children>
             </GridPane>
-            <Button fx:id="updateButton" mnemonicParsing="false" onAction="#onUpdateButtonClick" prefHeight="38.0" prefWidth="281.0" text="Обновить" />
+            <Button fx:id="updateButton" mnemonicParsing="false" onAction="#onUpdateButtonClick" prefHeight="38.0" prefWidth="228.0" text="Обновить" />
          </children>
+         <BorderPane.margin>
+            <Insets left="15.0" top="20.0" />
+         </BorderPane.margin>
       </VBox>
    </right>
 </BorderPane>

@@ -30,7 +30,6 @@ public class MainController {
     public TableView movementsTableView;
 
     private final MovementService movementService;
-    private final SerialPortController portController;
 
 
     public void onUpdateButtonClick() {
@@ -45,9 +44,6 @@ public class MainController {
         movementsTableView.setItems(movementsList);
     }
 
-    public void onTurnOffPortButtonClick() {
-        portController.closePort();
-    }
 
     public void onPersonalMovementsButtonClick() {
         try {
@@ -99,6 +95,5 @@ public class MainController {
 
     public MainController() {
         movementService = new MovementService();
-        portController = SerialPortController.getInstance();
     }
 }

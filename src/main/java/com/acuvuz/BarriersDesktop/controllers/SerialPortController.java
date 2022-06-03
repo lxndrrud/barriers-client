@@ -1,37 +1,28 @@
 package com.acuvuz.BarriersDesktop.controllers;
 
 import com.acuvuz.BarriersDesktop.JSONMappers.User;
-import com.acuvuz.BarriersDesktop.MainApplication;
 import com.acuvuz.BarriersDesktop.services.MovementService;
 import com.fazecast.jSerialComm.*;
 import io.github.cdimascio.dotenv.Dotenv;
-import javafx.fxml.FXML;
 
-import javax.swing.*;
 import java.nio.charset.StandardCharsets;
 
 
 public class SerialPortController {
     private static SerialPortController instance;
     private final MovementService movementService;
-    public static SerialPortController getInstance() {
-        if (instance == null) {
-            instance = new SerialPortController();
-        }
-        return instance;
-    }
     private SerialPort port;
 
     private Thread thread;
 
-    private SerialPortController() {
+    public SerialPortController(String portDescriptor) {
         movementService = new MovementService();
-        loadSettings();
+        loadSettings(portDescriptor);
     }
 
-    private void loadSettings() {
+    private void loadSettings(String portDescriptor) {
         Dotenv dotenv = Dotenv.load();
-        port = SerialPort.getCommPort(dotenv.get("EXIT_PORT_PATH"));
+        port = SerialPort.getCommPort(dotenv.get(portDescriptor));
     }
 
     public void closePort() {
@@ -232,7 +223,7 @@ public class SerialPortController {
 
 
     public static void main(String[] args) {
-        SerialPortController portController = new SerialPortController();
+        SerialPortController portController = new SerialPortController("EXIT_PORT_PATH");
         portController.writeToPort("1");
     }
 }

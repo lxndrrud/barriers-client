@@ -26,11 +26,9 @@ public class UserModalController {
 
     public Button updateButton;
 
-    public Label lastnameLabel;
-    public Label firstnameLabel;
-    public Label middlenameLabel;
-    public Label cardLabel;
-
+    public TextField fullnameTextField;
+    public TextField cardTextField;
+    public TextField typeTextField;
     public TitledPane positionsPane;
     public TitledPane groupsPane;
 
@@ -68,12 +66,12 @@ public class UserModalController {
 
     public void setStudent(Student student) {
         this.student = student;
-        firstnameLabel.setText(student.student.firstname);
-        middlenameLabel.setText(student.student.middlename);
-        lastnameLabel.setText(student.student.lastname);
-        cardLabel.setText(student.student.skud_card);
-        employeeFlagLabel.setText("Нет");
-        studentFlagLabel.setText("Да");
+        fullnameTextField.setText(
+                student.student.lastname + " " +  student.student.firstname + " "
+                        + student.student.middlename
+        );
+        cardTextField.setText(student.student.skud_card);
+        typeTextField.setText("Студент");
         var vbox = new VBox();
         for (var group: student.groups) {
             vbox.getChildren().add(new Label(
@@ -83,12 +81,12 @@ public class UserModalController {
     }
     public void setEmployee(Employee employee) {
         this.employee = employee;
-        firstnameLabel.setText(employee.employee.firstname);
-        middlenameLabel.setText(employee.employee.middlename);
-        lastnameLabel.setText(employee.employee.lastname);
-        cardLabel.setText(employee.employee.skud_card);
-        employeeFlagLabel.setText("Да");
-        studentFlagLabel.setText("Нет");
+        fullnameTextField.setText(
+                employee.employee.lastname + " " + employee.employee.firstname + " "
+                + employee.employee.middlename
+        );
+        cardTextField.setText(employee.employee.skud_card);
+        typeTextField.setText("Сотрудник");
         var vbox = new VBox();
         for (var position: employee.positions) {
             vbox.getChildren().add(new Label(
