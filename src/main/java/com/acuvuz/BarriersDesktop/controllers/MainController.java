@@ -33,7 +33,12 @@ public class MainController {
 
 
     public void onUpdateButtonClick() {
+        updateMovements();
+    }
+
+    public void updateMovements() {
         var datesArray = DateTimeParser.parseMovementInterval(
+                true,
                 fromDate, fromHour, fromMinute,
                 toDate, toHour, toMinute
         );
@@ -48,6 +53,7 @@ public class MainController {
     public void onPersonalMovementsButtonClick() {
         try {
             var datesArray = DateTimeParser.parseMovementInterval(
+                    false,
                     fromDate, fromHour, fromMinute,
                     toDate, toHour, toMinute
             );
@@ -63,7 +69,8 @@ public class MainController {
             else if (selectedMovement.id_employee != 0) {
                 employee = movementService.getEmployeeInfo(selectedMovement.id_employee);
             }
-            movements = movementService.getMovementsForUser(selectedMovement,
+            movements = movementService.getMovementsForUser(selectedMovement.id_student,
+                    selectedMovement.id_employee,
                     datesArray.get(0), datesArray.get(1));
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader(MainApplication.class
@@ -72,7 +79,7 @@ public class MainController {
             Stage modalStage = new Stage();
 
             // Create the dialog Stage.
-            Scene scene = new Scene(loader.load(), 800, 600);
+            Scene scene = new Scene(loader.load(), 1200, 800);
             modalStage.setTitle("Информация о человеке");
             modalStage.setScene(scene);
 

@@ -54,13 +54,18 @@ public class UserModalController {
 
     public void onUpdateButtonClick() {
         var datesArray = DateTimeParser.parseMovementInterval(
+                false,
                 fromDate, fromHour, fromMinute,
                 toDate, toHour, toMinute
         );
-        MovementWithUser[] movementWithUsers = this.movementService.getAll(datesArray.get(0), datesArray.get(1));
+
+        Movement[] movements = this.movementService.getMovementsForUser(
+                student != null ? student.student.id : 0,
+                employee != null ? employee.employee.id : 0,
+                datesArray.get(0), datesArray.get(1));
         //var movementList = movementsTableView.getItems();
         movementsTableView.getItems().removeAll();
-        ObservableList<MovementWithUser> movementsList = FXCollections.observableArrayList(movementWithUsers);
+        ObservableList<Movement> movementsList = FXCollections.observableArrayList(movements);
         movementsTableView.setItems(movementsList);
     }
 
@@ -72,12 +77,17 @@ public class UserModalController {
         );
         cardTextField.setText(student.student.skud_card);
         typeTextField.setText("Студент");
+        var scrollPane = new ScrollPane();
         var vbox = new VBox();
         for (var group: student.groups) {
-            vbox.getChildren().add(new Label(
-                    group.title + " - " + group.course+ " курс - "+ group.department_title));
+            var textField = new TextField(
+                    group.title + " - " + group.course+ " курс - "+ group.department_title);
+            textField.setPrefWidth(330);
+            textField.setEditable(false);
+            vbox.getChildren().add(textField);
         }
-        groupsPane.setContent(vbox);
+        scrollPane.setContent(vbox);
+        groupsPane.setContent(scrollPane);
     }
     public void setEmployee(Employee employee) {
         this.employee = employee;
@@ -87,12 +97,17 @@ public class UserModalController {
         );
         cardTextField.setText(employee.employee.skud_card);
         typeTextField.setText("Сотрудник");
+        var scrollPane = new ScrollPane();
         var vbox = new VBox();
         for (var position: employee.positions) {
-            vbox.getChildren().add(new Label(
-                    position.title + " - " + position.department_title + " - " + position.date_drop));
+            var textField = new TextField(
+                    position.title + " - " + position.department_title + " - " + position.date_drop);
+            textField.setPrefWidth(330);
+            textField.setEditable(false);
+            vbox.getChildren().add(textField);
         }
-        positionsPane.setContent(vbox);
+        scrollPane.setContent(vbox);
+        positionsPane.setContent(scrollPane);
     }
 
     public void setMovements(Movement[] movements) {

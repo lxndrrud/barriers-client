@@ -9,20 +9,16 @@ import java.nio.charset.StandardCharsets;
 
 
 public class SerialPortController {
-    private static SerialPortController instance;
+    private final MainController mainController;
     private final MovementService movementService;
     private SerialPort port;
 
     private Thread thread;
 
-    public SerialPortController(String portDescriptor) {
+    public SerialPortController(String portDescriptor, MainController mainController1) {
         movementService = new MovementService();
-        loadSettings(portDescriptor);
-    }
-
-    private void loadSettings(String portDescriptor) {
-        Dotenv dotenv = Dotenv.load();
-        port = SerialPort.getCommPort(dotenv.get(portDescriptor));
+        mainController = mainController1;
+        port = SerialPort.getCommPort(portDescriptor);
     }
 
     public void closePort() {
@@ -156,7 +152,7 @@ public class SerialPortController {
                     // 350 * 10 = 3,5 секунды на проход,
                     // ~80 - оптимальная задержка, при которой сначала закрывается турникет, а потом шлется сигнал
                     // о неудачном проходе. Каждые 10 милисекунд прослушивается сериал порт
-                    for (int i=0; i < 350 + 80; i++) {
+                    for (int i=0; i < 350 + 100; i++) {
                         String fromPort = readFromPort();
                         if (fromPort.equals("exit-success")) {
                             int returnCode = movementService.createMovementAction(portData);
@@ -182,6 +178,7 @@ public class SerialPortController {
                     if (!exited) {
                         movementService.createFailMovementAction(portData);
                     }
+                    mainController.updateMovements();
 
                 }
             }
@@ -223,7 +220,7 @@ public class SerialPortController {
 
 
     public static void main(String[] args) {
-        SerialPortController portController = new SerialPortController("EXIT_PORT_PATH");
+        SerialPortController portController = new SerialPortController("EXIT_PORT_PATH", null);
         portController.writeToPort("1");
     }
 }

@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="641.0" prefWidth="782.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.acuvuz.BarriersDesktop.controllers.UserModalController">
+<BorderPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.acuvuz.BarriersDesktop.controllers.UserModalController">
    <center>
       <TableView fx:id="movementsTableView" prefHeight="457.0" prefWidth="535.0" BorderPane.alignment="CENTER">
         <columns>
@@ -72,12 +72,8 @@
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="594.0">
                            <children>
-                            <TitledPane fx:id="positionsPane" animated="false" expanded="false" prefHeight="97.0" prefWidth="280.0" text="Должности" wrapText="true">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="22.0" prefWidth="279.0" />
-                              </content>
-                            </TitledPane>
-                            <TitledPane fx:id="groupsPane" animated="false" expanded="false" prefHeight="99.0" prefWidth="315.0" text="Группы">
+                            <TitledPane fx:id="positionsPane" animated="false" prefHeight="100.0" prefWidth="350.0" text="Должности" wrapText="true" />
+                            <TitledPane fx:id="groupsPane" animated="false" prefHeight="100.0" prefWidth="350.0" text="Группы">
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                               </content>
@@ -102,7 +98,7 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <DatePicker fx:id="fromDate" prefHeight="24.0" prefWidth="228.0" />
+            <DatePicker fx:id="fromDate" prefHeight="24.0" prefWidth="228.0" promptText="01.01.1980" />
             <GridPane>
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -114,8 +110,8 @@
                <children>
                   <HBox GridPane.rowIndex="1">
                      <children>
-                        <TextField fx:id="fromHour" prefHeight="24.0" prefWidth="84.0" />
-                        <TextField fx:id="fromMinute" layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="84.0">
+                        <TextField fx:id="fromHour" prefHeight="24.0" prefWidth="84.0" promptText="00" />
+                        <TextField fx:id="fromMinute" layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="84.0" promptText="00">
                            <HBox.margin>
                               <Insets left="58.0" />
                            </HBox.margin></TextField>
@@ -137,7 +133,7 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <DatePicker fx:id="toDate" prefHeight="24.0" prefWidth="228.0" />
+            <DatePicker fx:id="toDate" prefHeight="24.0" prefWidth="228.0" promptText="сегодня" />
             <GridPane>
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -149,8 +145,8 @@
                <children>
                   <HBox GridPane.rowIndex="1">
                      <children>
-                        <TextField fx:id="toHour" prefHeight="24.0" prefWidth="84.0" />
-                        <TextField fx:id="toMinute" layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="84.0">
+                        <TextField fx:id="toHour" prefHeight="24.0" prefWidth="84.0" promptText="23" />
+                        <TextField fx:id="toMinute" layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="84.0" promptText="59">
                            <HBox.margin>
                               <Insets left="58.0" />
                            </HBox.margin></TextField>

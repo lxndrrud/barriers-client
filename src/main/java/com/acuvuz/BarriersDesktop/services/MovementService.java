@@ -194,21 +194,21 @@ public class MovementService {
         }
     }
 
-    public Movement[] getMovementsForUser(MovementWithUser movement, String from, String to) throws Exception {
+    public Movement[] getMovementsForUser(int idStudent, int idEmployee, String from, String to) {
         var client = HttpClientBuilder.create().build();
         try {
             HttpGet httpGet = new HttpGet(this.root.getHost() + "/movements/user");
             var uriBuilder = new URIBuilder(httpGet.getURI());
-            if (movement.id_student != 0) {
+            if (idStudent != 0) {
                 uriBuilder
-                        .addParameter("id_student", Integer.toString(movement.id_student))
+                        .addParameter("id_student", Integer.toString(idStudent))
                         .addParameter("from", from)
                         .addParameter("to", to)
                         .build();
             }
-            else if (movement.id_employee != 0) {
+            else if (idEmployee != 0) {
                 uriBuilder
-                        .addParameter("id_employee", Integer.toString(movement.id_employee))
+                        .addParameter("id_employee", Integer.toString(idEmployee))
                         .addParameter("from", from)
                         .addParameter("to", to)
                         .build();
@@ -217,7 +217,6 @@ public class MovementService {
             httpGet.setURI(uriBuilder.build());
             HttpResponse response = client.execute(httpGet);
 
-            client.close();
             int returnCode = response.getStatusLine().getStatusCode();
             String data = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
             if (returnCode == 200) {
@@ -228,12 +227,15 @@ public class MovementService {
                 return movements;
             }
             else {
-                throw new Exception(response.getStatusLine().getStatusCode()
+                var exception = new Exception(response.getStatusLine().getStatusCode()
                         + response.getStatusLine().getReasonPhrase());
+                client.close();
+                throw exception;
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             System.out.println("Ошибка при запросе на сервер");
-            throw e;
+            return new Movement[]{};
         }
     }
 
@@ -290,7 +292,7 @@ public class MovementService {
 
             int i=0;
             for (var move: all) {
-                var get = movements.getMovementsForUser(move, "14.04.2022T15:00", "");
+                var get = movements.getMovementsForUser(move.id_student, move.id_employee, "14.04.2022T15:00", "");
                 for (var getted: get) {
                     System.out.println(getted.building_name);
                     System.out.println(getted.event_name);
@@ -321,7 +323,7 @@ public class MovementService {
                 var studentInfo = getStudentInfo(movementWithUser.id_student);
                 //returnCode = getStudentInfoAndMovements(movementWithUser.id_student, from, to);
             }
-            var movements = getMovementsForUser(movementWithUser, from, to);
+            var movements = getMovementsForUser(1, 0, from, to);
 
 
         } catch (Exception e ) {
