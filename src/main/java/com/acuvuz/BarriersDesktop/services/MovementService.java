@@ -54,12 +54,7 @@ public class MovementService {
         }
     }
 
-    public User sendSkudCardInfo(String portData) {
-        System.out.println(portData);
-
-        var variables = portData.split(";");
-        System.out.println(variables);
-        String code = variables[0].split("=")[1];
+    public User sendSkudCardInfo(String code) {
         //String reader = variables[1].split("=")[1];
         try {
             var client = HttpClientBuilder.create().build();
@@ -85,24 +80,11 @@ public class MovementService {
         }
     }
 
-    public int createMovementAction(String portData) {
-
-        // Парсинг данных с порта
-        var variables = portData.split(";");
-        String code = variables[0].split("=")[1];
-        String reader = variables[1].split("=")[1].trim();
-        System.out.println("Code: '" + code + "'");
-        System.out.println("Reader: '" + reader + "'");
-
+    public int createMovementAction(String reader, String code) {
         return sendCreateMovementActionRequest(reader, code);
     }
 
-    public int createFailMovementAction(String portData) {
-        // Парсинг данных с порта
-        var variables = portData.split(";");
-        String code = variables[0].split("=")[1];
-        System.out.println("Code: '" + code + "'");
-
+    public int createFailMovementAction(String code) {
         return sendCreateMovementActionRequest("fail", code);
     }
 

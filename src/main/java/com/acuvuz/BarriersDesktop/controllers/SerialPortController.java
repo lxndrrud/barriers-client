@@ -6,6 +6,7 @@ import com.fazecast.jSerialComm.*;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 
 public class SerialPortController {
@@ -25,6 +26,7 @@ public class SerialPortController {
         port.closePort();
     }
 
+    /*
     public void listenToPortOld() {
         port.setBaudRate(9600);
         port.openPort();
@@ -34,7 +36,6 @@ public class SerialPortController {
                 while (port.bytesAvailable() == 0) {
                     Thread.sleep(30);
                 }
-                 */
                 String portData = readFromPort();
                 if (portData.contains("@Code")) {
                     User user = movementService.sendSkudCardInfo(portData);
@@ -116,7 +117,7 @@ public class SerialPortController {
                             }
                         }
 
-                         */
+
 
                     }
 
@@ -132,6 +133,7 @@ public class SerialPortController {
             System.out.println("Произошла ошибка с считыванием с порта!");
         }
     }
+    */
 
     public void listenToPort() {
         port.setBaudRate(9600);
@@ -139,27 +141,31 @@ public class SerialPortController {
         try {
             while (port.isOpen()) {
                 String portData = readFromPort();
-                if (portData.contains("@Code")) {
-                    User user = movementService.sendSkudCardInfo(portData);
+                if (portData.contains("@Code") && portData.contains("@Direction")) {
+                    var parsedData = parsePortData(portData);
+
+                    User user = movementService.sendSkudCardInfo(parsedData.get(0));
 
                     if (user.id == 0) {
-                        writeToPort("@Code=user-not-found;@reader=exit");
+                        writeToPort("@Code=user-not-found;@reader=" + parsedData.get(1));
                         continue;
                     }
 
-                    boolean exited = false;
-                    writeToPort("@Code=user-success;@reader=exit");
+                    boolean actionPerfomed = false;
+                    writeToPort("@Code=user-success;@reader=" + parsedData.get(1));
                     // 350 * 10 = 3,5 секунды на проход,
                     // ~80 - оптимальная задержка, при которой сначала закрывается турникет, а потом шлется сигнал
                     // о неудачном проходе. Каждые 10 милисекунд прослушивается сериал порт
                     for (int i=0; i < 350 + 100; i++) {
                         String fromPort = readFromPort();
-                        if (fromPort.equals("exit-success")) {
-                            int returnCode = movementService.createMovementAction(portData);
+                        // enter or exit success
+                        if (fromPort.equals(parsedData.get(1) + "-success")) {
+                            int returnCode = movementService
+                                    .createMovementAction(parsedData.get(1), parsedData.get(0));
                             if (returnCode != 201) {
                                 System.out.println("Произошла ошибка!");
                             }
-                            exited = true;
+                            actionPerfomed = true;
                             break;
                         }
                         /*
@@ -175,8 +181,8 @@ public class SerialPortController {
                          */
                         Thread.sleep(10);
                     }
-                    if (!exited) {
-                        movementService.createFailMovementAction(portData);
+                    if (!actionPerfomed) {
+                        movementService.createFailMovementAction(parsedData.get(0));
                     }
                     mainController.updateMovements();
 
@@ -196,6 +202,27 @@ public class SerialPortController {
             System.out.println("Serial port ends!");
         });
         this.thread.start();
+    }
+
+
+    private ArrayList<String> parsePortData(String portData) {
+        /*
+        return value : { code, direction }
+         */
+        try {
+            var variables = portData.split(";");
+            String code = variables[0].split("=")[1].trim();
+            String direction = variables[1].split("=")[1].trim();
+            System.out.println(code);
+            System.out.println(direction);
+            var result = new ArrayList<String>();
+            result.add(code);
+            result.add(direction);
+            System.out.println(code.length());
+            return result;
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
     }
 
     public void writeToPort(String toWrite) {
