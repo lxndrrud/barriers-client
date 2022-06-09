@@ -1,5 +1,6 @@
 package com.acuvuz.BarriersDesktop.services;
 
+import com.acuvuz.BarriersDesktop.DTO.ParsedPortData;
 import com.acuvuz.BarriersDesktop.JSONMappers.*;
 import com.google.gson.Gson;
 import org.apache.http.HttpResponse;
@@ -80,12 +81,12 @@ public class MovementService {
         }
     }
 
-    public int createMovementAction(String reader, String code) {
-        return sendCreateMovementActionRequest(reader, code);
+    public int createMovementAction(ParsedPortData parsedPortData) {
+        return sendCreateMovementActionRequest(parsedPortData.getReader(), parsedPortData.getCode());
     }
 
-    public int createFailMovementAction(String code) {
-        return sendCreateMovementActionRequest("fail", code);
+    public int createFailMovementAction(ParsedPortData parsedPortData) {
+        return sendCreateMovementActionRequest("fail", parsedPortData.getCode());
     }
 
     private int sendCreateMovementActionRequest(String event, String skudCard) {

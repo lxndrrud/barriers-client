@@ -9,6 +9,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -172,4 +173,37 @@
          </children>
       </VBox>
    </right>
+   <bottom>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" prefHeight="21.0" prefWidth="1108.0" text="Информация о последнем отсканированном человеке" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </Label>
+            <HBox prefHeight="193.0" prefWidth="1105.0">
+               <children>
+                  <ImageView fitHeight="204.0" fitWidth="204.0" pickOnBounds="true" preserveRatio="true" />
+                  <VBox prefHeight="204.0" prefWidth="444.0">
+                     <children>
+                        <TextField fx:id="fullnameLPTextField" alignment="CENTER" editable="false" promptText="ФИО">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </TextField>
+                        <TextField fx:id="typeLPTextField" alignment="TOP_CENTER" editable="false" promptText="Тип">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </bottom>
 </BorderPane>

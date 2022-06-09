@@ -1,9 +1,6 @@
 package com.acuvuz.BarriersDesktop.controllers;
 
-import com.acuvuz.BarriersDesktop.JSONMappers.Employee;
-import com.acuvuz.BarriersDesktop.JSONMappers.Movement;
-import com.acuvuz.BarriersDesktop.JSONMappers.MovementWithUser;
-import com.acuvuz.BarriersDesktop.JSONMappers.Student;
+import com.acuvuz.BarriersDesktop.JSONMappers.*;
 import com.acuvuz.BarriersDesktop.MainApplication;
 import com.acuvuz.BarriersDesktop.services.MovementService;
 import com.acuvuz.BarriersDesktop.utils.DateTimeParser;
@@ -29,6 +26,9 @@ public class MainController {
 
     public TableView movementsTableView;
 
+    public TextField fullnameLPTextField;
+    public TextField typeLPTextField;
+
     private final MovementService movementService;
 
 
@@ -47,6 +47,15 @@ public class MainController {
         movementsTableView.getItems().removeAll();
         ObservableList<MovementWithUser> movementsList = FXCollections.observableArrayList(movementWithUsers);
         movementsTableView.setItems(movementsList);
+    }
+
+    public void setLastPersonInfo(User user) {
+        // Еще что-то нужно сделать с фоткой
+        fullnameLPTextField.setText(
+                user.lastname + " " + user.firstname
+                + " " +user.middlename
+        );
+        typeLPTextField.setText(user.type);
     }
 
 
