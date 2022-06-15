@@ -1,5 +1,6 @@
 package com.acuvuz.BarriersDesktop.controllers;
 
+import com.acuvuz.BarriersDesktop.DTO.ParsedPortData;
 import com.acuvuz.BarriersDesktop.JSONMappers.*;
 import com.acuvuz.BarriersDesktop.MainApplication;
 import com.acuvuz.BarriersDesktop.services.MovementService;
@@ -26,15 +27,59 @@ public class MainController {
 
     public TableView movementsTableView;
 
+    // LP = LastPerson (последний вошедший человек)
     public TextField fullnameLPTextField;
     public TextField typeLPTextField;
 
     private final MovementService movementService;
 
+    private SerialPortController barrier1PortController;
+    private SerialPortController barrier2PortController;
+
+    public void setBarrier1PortController(SerialPortController barrier1PortController) {
+        this.barrier1PortController = barrier1PortController;
+    }
+
+    public void setBarrier2PortController(SerialPortController barrier2PortController) {
+        this.barrier2PortController = barrier2PortController;
+    }
 
     public void onUpdateButtonClick() {
         updateMovements();
     }
+
+    public void onOpenEnterBarrier1ButtonClick() {
+        barrier1PortController.openBarrier("enter");
+        movementService.createMovementAction(
+                ParsedPortData.createGuestParsedPortData("enter")
+        );
+        updateMovements();
+    }
+    public void onOpenExitBarrier1ButtonClick() {
+        barrier1PortController.openBarrier("exit");
+        movementService.createMovementAction(
+                ParsedPortData.createGuestParsedPortData("exit")
+        );
+        updateMovements();
+    }
+
+    public void onOpenEnterBarrier2ButtonClick() {
+        barrier2PortController.openBarrier("enter");
+        movementService.createMovementAction(
+                ParsedPortData.createGuestParsedPortData("enter")
+        );
+        updateMovements();
+    }
+
+    public void onOpenExitBarrier2ButtonClick() {
+        barrier2PortController.openBarrier("exit");
+        movementService.createMovementAction(
+                ParsedPortData.createGuestParsedPortData("exit")
+        );
+        updateMovements();
+    }
+
+
 
     public void updateMovements() {
         var datesArray = DateTimeParser.parseMovementInterval(
@@ -99,6 +144,8 @@ public class MainController {
             }
             else if (employee != null) {
                 controller.setEmployee(employee);
+            } else {
+                controller.setGuest();
             }
 
             controller.setMovements(movements);

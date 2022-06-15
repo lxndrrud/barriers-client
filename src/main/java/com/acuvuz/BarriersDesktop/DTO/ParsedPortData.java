@@ -11,6 +11,23 @@ public class ParsedPortData {
             reader = variables[1].split("=")[1].trim();
     }
 
+    private ParsedPortData() {}
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setReader(String reader) {
+        this.reader = reader;
+    }
+
+    public static ParsedPortData createGuestParsedPortData(String reader) {
+        var newParsed = new ParsedPortData();
+        newParsed.setCode("guest");
+        newParsed.setReader(reader);
+        return newParsed;
+    }
+
     public String getCode() {
         return code;
     }

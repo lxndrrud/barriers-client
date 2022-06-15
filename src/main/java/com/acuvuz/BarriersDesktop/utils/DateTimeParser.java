@@ -86,4 +86,17 @@ public class DateTimeParser {
     public static String get1980DateDefaultValue() {
         return "01.01.1980T";
     }
+
+    public static String parseTimestamp(String timestamp) {
+        String date = timestamp.split("T")[0];
+        var splittedDate = date.split("-");
+        String parsedDate = splittedDate[2] + "." +
+                splittedDate[1] + "." +splittedDate[0];
+        String time = timestamp
+                .split("T")[1]
+                .split("\\+")[0]
+                .split("\\.")[0];
+
+        return time + " " + parsedDate;
+    }
 }

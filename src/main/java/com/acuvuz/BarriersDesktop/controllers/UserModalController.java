@@ -110,6 +110,12 @@ public class UserModalController {
         positionsPane.setContent(scrollPane);
     }
 
+    public void setGuest() {
+        fullnameTextField.setText("Гость");
+        cardTextField.setText("Отсутствует");
+        typeTextField.setText("Гость");
+    }
+
     public void setMovements(Movement[] movements) {
         this.movements = movements;
         movementsTableView.getItems().removeAll();

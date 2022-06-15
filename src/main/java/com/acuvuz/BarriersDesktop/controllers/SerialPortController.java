@@ -38,13 +38,13 @@ public class SerialPortController {
 
                     User user = movementService.sendSkudCardInfo(parsedData.getCode());
                     if (user.id == 0) {
-                        writeToPort("@Code=user-not-found;@reader=" + parsedData.getReader());
+                        alarmBarrier(parsedData.getReader());
                         continue;
                     }
                     mainController.setLastPersonInfo(user);
 
                     boolean actionPerfomed = false;
-                    writeToPort("@Code=user-success;@reader=" + parsedData.getReader());
+                    openBarrier(parsedData.getReader());
                     // 350 * 10 = 3,5 секунды на проход,
                     // ~80 - оптимальная задержка, при которой сначала закрывается турникет, а потом шлется сигнал
                     // о неудачном проходе. Каждые 10 милисекунд прослушивается сериал порт
@@ -84,6 +84,15 @@ public class SerialPortController {
             port.closePort();
             System.out.println("Произошла ошибка с считыванием с порта!");
         }
+    }
+
+    public void openBarrier(String reader) {
+        writeToPort("@Code=user-success;@reader=" + reader);
+    }
+
+    public void alarmBarrier(String reader) {
+        writeToPort("@Code=user-not-found;@reader=" + reader);
+
     }
 
     public void run() {

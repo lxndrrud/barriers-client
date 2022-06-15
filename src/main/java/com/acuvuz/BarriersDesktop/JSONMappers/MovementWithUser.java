@@ -1,5 +1,9 @@
 package com.acuvuz.BarriersDesktop.JSONMappers;
 
+import com.acuvuz.BarriersDesktop.utils.DateTimeParser;
+
+import java.util.Arrays;
+
 public class MovementWithUser {
     public int id;
     public int id_building;
@@ -33,7 +37,7 @@ public class MovementWithUser {
     }
 
     public String getEvent_timestamp() {
-        return event_timestamp;
+        return DateTimeParser.parseTimestamp(event_timestamp);
     }
 
     public int getId_student() {
@@ -67,7 +71,7 @@ public class MovementWithUser {
     public String getType() {
         if (id_student != 0) return "Студент";
         else if (id_employee != 0 ) return "Сотрудник";
-        else return "Ошибка определения!";
+        else return "Гость";
     }
 }
 

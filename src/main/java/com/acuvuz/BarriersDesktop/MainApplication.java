@@ -13,8 +13,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class MainApplication extends Application {
-    SerialPortController exitPortController;
-    SerialPortController enterPortController;
+    SerialPortController barrier1Controller;
+    SerialPortController barrier2Controller;
     @Override
     public void start(Stage stage) throws IOException {
         try {
@@ -43,23 +43,25 @@ public class MainApplication extends Application {
         Dotenv dotenv = Dotenv.load();
         String exitString = dotenv.get("EXIT_PORT_PATH", "default");
         if (!exitString.equals("default")) {
-            exitPortController = new SerialPortController(exitString, mainController);
-            exitPortController.run();
+            barrier1Controller = new SerialPortController(exitString, mainController);
+            mainController.setBarrier1PortController(barrier1Controller);
+            barrier1Controller.run();
         }
         String enterString = dotenv.get("ENTER_PORT_PATH", "default");
         if (enterString != "default") {
-            enterPortController = new SerialPortController(enterString, mainController);
-            enterPortController.run();
+            barrier2Controller = new SerialPortController(enterString, mainController);
+            mainController.setBarrier2PortController(barrier2Controller);
+            barrier2Controller.run();
         }
     }
 
     @Override
     public void stop() throws Exception {
         super.stop();
-        if (exitPortController != null)
-            exitPortController.closePort();
-        if (enterPortController != null)
-            enterPortController.closePort();
+        if (barrier1Controller != null)
+            barrier1Controller.closePort();
+        if (barrier2Controller != null)
+            barrier2Controller.closePort();
     }
 
     public static void main(String[] args) {
