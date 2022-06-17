@@ -171,22 +171,22 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <Button fx:id="openEnterBarrier1Button" mnemonicParsing="false" onAction="#onOpenEnterBarrier1ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Открыть турникет 1 на вход">
+                  <Button fx:id="unlockEnterBarrier1Button" mnemonicParsing="false" onAction="#onUnlockBarrier1ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Открыть турникет 1">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="openExitBarrier1Button" mnemonicParsing="false" onAction="#onOpenExitBarrier1ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Открыть турникет 1 на выход">
+                  <Button fx:id="lockBarrier1Button" mnemonicParsing="false" onAction="#onLockBarrier1ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Закрыть турникет 1">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="openEnterBarrier2Button" mnemonicParsing="false" onAction="#onOpenEnterBarrier2ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Открыть турникет 2 на вход">
+                  <Button fx:id="unlockEnterBarrier2Button" mnemonicParsing="false" onAction="#onUnlockBarrier2ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Открыть турникет 2">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="openExitBarrier2Button" layoutX="10.0" layoutY="453.0" mnemonicParsing="false" onAction="#onOpenExitBarrier2ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Открыть турникет 2 на выход">
+                  <Button fx:id="lockBarrier2Button" layoutX="10.0" layoutY="453.0" mnemonicParsing="false" onAction="#onLockBarrier2ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Закрыть турникет 2">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>

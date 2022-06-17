@@ -5,7 +5,6 @@
 
 
 WIEGAND wg;
-String serialData = "";
 void setup() {
   // put your setup code here, to run once:
   /* 
@@ -58,6 +57,14 @@ String getValue(String data, char separator, int index)
     return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
 }
 
+String getCode(String data) {
+  return getValue(getValue(data, ';', 0), '=', 1);
+}
+
+String getReader(String data) {
+  return getValue(getValue(data, ';', 1), '=', 1);
+}
+
 
 void loop() {
   delay(50);
@@ -90,7 +97,7 @@ void loop() {
 	}
 
   if(Serial.available() > 0) {
-    serialData = Serial.readString();
+    String serialData = Serial.readString();
     serialData.trim();
     String code = getValue(serialData, ';', 0);
     String reader = getValue(serialData, ';', 1);
@@ -168,6 +175,43 @@ void loop() {
         digitalWrite(7, HIGH);
         digitalWrite(9, HIGH);
       }
+      else if (reader == "both") {
+        digitalWrite(4, HIGH);
+        digitalWrite(8, HIGH);
+        digitalWrite(7, HIGH);
+        digitalWrite(9, HIGH);
+      }
     }
+
+    //
+    // @Code=unlock;@reader=exit or @Code=unlock;@reader=enter
+    if (code == "unlock") {
+      if (reader == "exit") {
+        digitalWrite(4, LOW);
+        digitalWrite(8, LOW);
+        while(Serial.available() == 0)
+        digitalWrite(4, HIGH);
+        digitalWrite(8, HIGH);
+      }
+      else if (reader == "enter") {
+        digitalWrite(7, LOW);
+        digitalWrite(9, LOW);
+        while(Serial.available() == 0)
+        digitalWrite(7, HIGH);
+        digitalWrite(9, HIGH);
+      }
+      else if (reader == "both") {
+        digitalWrite(4, LOW);
+        digitalWrite(8, LOW);
+        digitalWrite(7, LOW);
+        digitalWrite(9, LOW);
+        while(Serial.available() == 0)
+        digitalWrite(4, HIGH);
+        digitalWrite(8, HIGH);
+        digitalWrite(7, HIGH);
+        digitalWrite(9, HIGH);
+      }
+    }
+    
   }
 }

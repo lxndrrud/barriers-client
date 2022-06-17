@@ -44,7 +44,7 @@ public class SerialPortController {
                     mainController.setLastPersonInfo(user);
 
                     boolean actionPerfomed = false;
-                    openBarrier(parsedData.getReader());
+                    openBarrierForUser(parsedData.getReader());
                     // 350 * 10 = 3,5 секунды на проход,
                     // ~80 - оптимальная задержка, при которой сначала закрывается турникет, а потом шлется сигнал
                     // о неудачном проходе. Каждые 10 милисекунд прослушивается сериал порт
@@ -86,13 +86,32 @@ public class SerialPortController {
         }
     }
 
-    public void openBarrier(String reader) {
+    /*
+    Открыть турникет на ~4 секунды
+     */
+    public void openBarrierForUser(String reader) {
         writeToPort("@Code=user-success;@reader=" + reader);
     }
 
+    /*
+    Подать сигнал о не найденном пользователе (звуковой сигнла - пищалка)
+     */
     public void alarmBarrier(String reader) {
-        writeToPort("@Code=user-not-found;@reader=" + reader);
+        writeToPort("@Code=user-not-found;@reader=both" + reader);
+    }
 
+    /*
+    Закрыть турникет
+     */
+    public void lockBarrier() {
+        writeToPort("@Code=lock;@reader=both");
+    }
+
+    /*
+    Открыть турникет на постоянку
+     */
+    public void unlockBarrier() {
+        writeToPort("@Code=unlock;@reader=both");
     }
 
     public void run() {
@@ -105,7 +124,7 @@ public class SerialPortController {
         this.thread.start();
     }
 
-    public void writeToPort(String toWrite) {
+    private void writeToPort(String toWrite) {
         port.setBaudRate(9600);
         if (port.isOpen()) {
             // Записываю в порт
@@ -115,7 +134,7 @@ public class SerialPortController {
         else System.out.println("Порт закрыт!");
     }
 
-    public String readFromPort() {
+    private String readFromPort() {
         byte[] readBuffer = new byte[1024];
         int numRead = port.readBytes(readBuffer, readBuffer.length);
         if (numRead == 0) {

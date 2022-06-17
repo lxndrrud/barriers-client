@@ -48,35 +48,46 @@ public class MainController {
         updateMovements();
     }
 
-    public void onOpenEnterBarrier1ButtonClick() {
-        barrier1PortController.openBarrier("enter");
+    public void onUnlockBarrier1ButtonClick() {
+        barrier1PortController.unlockBarrier();
+        /*
         movementService.createMovementAction(
                 ParsedPortData.createGuestParsedPortData("enter")
         );
-        updateMovements();
+
+         */
+        //updateMovements();
     }
-    public void onOpenExitBarrier1ButtonClick() {
-        barrier1PortController.openBarrier("exit");
+    public void onLockBarrier1ButtonClick() {
+        barrier1PortController.lockBarrier();
+        /*
         movementService.createMovementAction(
                 ParsedPortData.createGuestParsedPortData("exit")
         );
-        updateMovements();
+
+         */
+        //updateMovements();
     }
 
-    public void onOpenEnterBarrier2ButtonClick() {
-        barrier2PortController.openBarrier("enter");
+    public void onUnlockBarrier2ButtonClick() {
+        barrier2PortController.unlockBarrier();
+        /*
         movementService.createMovementAction(
                 ParsedPortData.createGuestParsedPortData("enter")
         );
-        updateMovements();
+
+         */
+        //updateMovements();
     }
 
-    public void onOpenExitBarrier2ButtonClick() {
-        barrier2PortController.openBarrier("exit");
+    public void onLockBarrier2ButtonClick() {
+        barrier2PortController.lockBarrier();
+        /*
         movementService.createMovementAction(
                 ParsedPortData.createGuestParsedPortData("exit")
         );
-        updateMovements();
+         */
+        //updateMovements();
     }
 
 
