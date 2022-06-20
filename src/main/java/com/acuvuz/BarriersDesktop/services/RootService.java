@@ -1,6 +1,14 @@
 package com.acuvuz.BarriersDesktop.services;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 public final class RootService {
+    private static RootService instance;
+    public static RootService getInstance() {
+        if (instance != null) return instance;
+        instance = new RootService();
+        return instance;
+    }
     private final String host;
     private final int idBuilding;
 
@@ -12,8 +20,9 @@ public final class RootService {
         return idBuilding;
     }
 
-    public RootService() {
-        this.host = "http://localhost:8081";
-        this.idBuilding = 1;
+    private RootService() {
+        Dotenv dotenv = Dotenv.load();
+        this.host = dotenv.get("SERVER_HOST");
+        this.idBuilding = Integer.parseInt(dotenv.get("ID_BUILDING"));
     }
 }

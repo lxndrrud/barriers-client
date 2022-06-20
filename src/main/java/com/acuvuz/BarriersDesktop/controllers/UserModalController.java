@@ -34,9 +34,6 @@ public class UserModalController {
 
     public TableView movementsTableView;
 
-    public Label studentFlagLabel;
-    public Label employeeFlagLabel;
-
     public DatePicker fromDate;
     public TextField fromHour;
     public TextField fromMinute;

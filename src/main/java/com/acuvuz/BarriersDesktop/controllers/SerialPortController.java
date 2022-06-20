@@ -3,6 +3,7 @@ package com.acuvuz.BarriersDesktop.controllers;
 import com.acuvuz.BarriersDesktop.DTO.ParsedPortData;
 import com.acuvuz.BarriersDesktop.JSONMappers.User;
 import com.acuvuz.BarriersDesktop.services.MovementService;
+import com.acuvuz.BarriersDesktop.services.UserService;
 import com.fazecast.jSerialComm.*;
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -13,12 +14,14 @@ import java.util.ArrayList;
 public class SerialPortController {
     private final MainController mainController;
     private final MovementService movementService;
+    private final UserService userService;
     private SerialPort port;
 
     private Thread thread;
 
     public SerialPortController(String portDescriptor, MainController mainController1) {
         movementService = new MovementService();
+        userService = new UserService();
         mainController = mainController1;
         port = SerialPort.getCommPort(portDescriptor);
     }
@@ -36,7 +39,7 @@ public class SerialPortController {
                 if (portData.contains("@Code") && portData.contains("@Direction")) {
                     var parsedData = new ParsedPortData(portData);
 
-                    User user = movementService.sendSkudCardInfo(parsedData.getCode());
+                    User user = userService.sendSkudCardInfo(parsedData.getCode());
                     if (user.id == 0) {
                         alarmBarrier(parsedData.getReader());
                         continue;

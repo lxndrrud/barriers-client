@@ -1,11 +1,9 @@
 package com.acuvuz.BarriersDesktop;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import com.acuvuz.BarriersDesktop.controllers.MainController;
 import com.acuvuz.BarriersDesktop.controllers.SerialPortController;
-import com.fazecast.jSerialComm.SerialPort;
 import io.github.cdimascio.dotenv.Dotenv;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -25,6 +23,7 @@ public class MainApplication extends Application {
             stage.setScene(scene);
             MainController mainController = fxmlLoader.getController();
             loadPorts(mainController);
+            mainController.loadBuildings();
             mainController.updateMovements();
             stage.show();
         } catch (Exception e) {

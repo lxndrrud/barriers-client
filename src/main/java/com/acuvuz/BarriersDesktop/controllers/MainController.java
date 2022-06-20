@@ -3,7 +3,10 @@ package com.acuvuz.BarriersDesktop.controllers;
 import com.acuvuz.BarriersDesktop.DTO.ParsedPortData;
 import com.acuvuz.BarriersDesktop.JSONMappers.*;
 import com.acuvuz.BarriersDesktop.MainApplication;
+import com.acuvuz.BarriersDesktop.services.BuildingsService;
 import com.acuvuz.BarriersDesktop.services.MovementService;
+import com.acuvuz.BarriersDesktop.services.RootService;
+import com.acuvuz.BarriersDesktop.services.UserService;
 import com.acuvuz.BarriersDesktop.utils.DateTimeParser;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,6 +19,7 @@ import javafx.stage.Stage;
 public class MainController {
     public Button updateButton;
     public Button personalMovementsButton;
+    public ComboBox buildingsComboBox;
     public DatePicker fromDate;
     public TextField fromHour;
     public TextField fromMinute;
@@ -32,6 +36,8 @@ public class MainController {
     public TextField typeLPTextField;
 
     private final MovementService movementService;
+    private final BuildingsService buildingsService;
+    private final UserService userService;
 
     private SerialPortController barrier1PortController;
     private SerialPortController barrier2PortController;
@@ -98,10 +104,14 @@ public class MainController {
                 fromDate, fromHour, fromMinute,
                 toDate, toHour, toMinute
         );
-        MovementWithUser[] movementWithUsers = this.movementService.getAll(datesArray.get(0), datesArray.get(1));
+        int id_building = ((Building) buildingsComboBox.getSelectionModel()
+                .getSelectedItem()).id;
+        MovementWithUser[] movementWithUsers = this.movementService.getAll(id_building,
+                datesArray.get(0), datesArray.get(1));
         //var movementList = movementsTableView.getItems();
         movementsTableView.getItems().removeAll();
-        ObservableList<MovementWithUser> movementsList = FXCollections.observableArrayList(movementWithUsers);
+        ObservableList<MovementWithUser> movementsList = FXCollections
+                .observableArrayList(movementWithUsers);
         movementsTableView.setItems(movementsList);
     }
 
@@ -129,10 +139,10 @@ public class MainController {
             var selectedMovement = (MovementWithUser) movementsTableView.getSelectionModel()
                     .getSelectedItem();
             if (selectedMovement.id_student != 0 ) {
-                student = movementService.getStudentInfo(selectedMovement.id_student);
+                student = userService.getStudentInfo(selectedMovement.id_student);
             }
             else if (selectedMovement.id_employee != 0) {
-                employee = movementService.getEmployeeInfo(selectedMovement.id_employee);
+                employee = userService.getEmployeeInfo(selectedMovement.id_employee);
             }
             movements = movementService.getMovementsForUser(selectedMovement.id_student,
                     selectedMovement.id_employee,
@@ -167,7 +177,25 @@ public class MainController {
 
     }
 
+    public void loadBuildings() {
+        buildingsComboBox.getItems().removeAll();
+        var buildingsList = FXCollections
+                .observableArrayList(buildingsService.GetAll());
+        int index = 0;
+        for (var b: buildingsList) {
+            if (b.id == RootService.getInstance().getIdBuilding()) {
+                break;
+            }
+            index++;
+        }
+        buildingsComboBox.setItems(buildingsList);
+        buildingsComboBox.getSelectionModel().select(index);
+
+    }
+
     public MainController() {
         movementService = new MovementService();
+        buildingsService = new BuildingsService();
+        userService = new UserService();
     }
 }

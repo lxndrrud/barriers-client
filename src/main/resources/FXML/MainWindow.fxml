@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -17,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="824.0" prefWidth="1105.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.acuvuz.BarriersDesktop.controllers.MainController">
+<BorderPane prefHeight="882.0" prefWidth="1146.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.acuvuz.BarriersDesktop.controllers.MainController">
    <center>
       <TableView fx:id="movementsTableView" prefHeight="464.0" prefWidth="643.0" BorderPane.alignment="CENTER">
         <columns>
@@ -72,81 +73,117 @@
    <right>
       <VBox prefHeight="781.0" prefWidth="289.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox prefHeight="554.0" prefWidth="274.0">
+            <VBox prefHeight="631.0" prefWidth="274.0">
                <children>
-                  <Label prefHeight="25.0" prefWidth="192.0" text="Фильтр &quot;От&quot;" textAlignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                  </Label>
-                  <DatePicker fx:id="fromDate" prefHeight="24.0" prefWidth="228.0" promptText="сегодня" />
-                  <GridPane layoutX="10.0" layoutY="35.0">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints maxHeight="26.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="42.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
+                  <VBox>
                      <children>
-                        <HBox GridPane.rowIndex="1">
+                        <Label prefHeight="25.0" prefWidth="192.0" text="Фильтр &quot;От&quot;" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <DatePicker fx:id="fromDate" prefHeight="24.0" prefWidth="228.0" promptText="сегодня" />
+                        <GridPane>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints maxHeight="26.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="42.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
                            <children>
-                              <TextField fx:id="fromHour" prefHeight="24.0" prefWidth="84.0" promptText="00" />
-                              <TextField fx:id="fromMinute" layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="84.0" promptText="00">
-                                 <HBox.margin>
-                                    <Insets left="58.0" />
-                                 </HBox.margin></TextField>
+                              <HBox GridPane.rowIndex="1">
+                                 <children>
+                                    <TextField fx:id="fromHour" prefHeight="24.0" prefWidth="84.0" promptText="00" />
+                                    <TextField fx:id="fromMinute" layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="84.0" promptText="00">
+                                       <HBox.margin>
+                                          <Insets left="58.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label alignment="CENTER" prefHeight="16.0" prefWidth="83.0" text="Час" />
+                                    <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="16.0" prefWidth="83.0" text="Минута">
+                                       <HBox.margin>
+                                          <Insets left="58.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                 </children>
+                              </HBox>
                            </children>
-                        </HBox>
-                        <HBox>
-                           <children>
-                              <Label alignment="CENTER" prefHeight="16.0" prefWidth="83.0" text="Час" />
-                              <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="16.0" prefWidth="83.0" text="Минута">
-                                 <HBox.margin>
-                                    <Insets left="58.0" />
-                                 </HBox.margin></Label>
-                           </children>
-                        </HBox>
+                        </GridPane>
                      </children>
-                  </GridPane>
-                  <Label layoutX="10.0" layoutY="10.0" prefHeight="25.0" prefWidth="192.0" text="Фильтр &quot;До&quot;" textAlignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
-                  </Label>
-                  <DatePicker fx:id="toDate" prefHeight="24.0" prefWidth="228.0" promptText="сегодня" />
-                  <GridPane layoutX="10.0" layoutY="89.0">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints maxHeight="26.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="42.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
+                  </VBox>
+                  <VBox>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
                      <children>
-                        <HBox GridPane.rowIndex="1">
+                        <Label prefHeight="25.0" prefWidth="192.0" text="Фильтр &quot;До&quot;" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <DatePicker fx:id="toDate" prefHeight="24.0" prefWidth="228.0" promptText="сегодня" />
+                        <GridPane>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints maxHeight="26.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="42.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
                            <children>
-                              <TextField fx:id="toHour" prefHeight="24.0" prefWidth="84.0" promptText="23" />
-                              <TextField fx:id="toMinute" layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="84.0" promptText="59">
-                                 <HBox.margin>
-                                    <Insets left="58.0" />
-                                 </HBox.margin></TextField>
+                              <HBox GridPane.rowIndex="1">
+                                 <children>
+                                    <TextField fx:id="toHour" prefHeight="24.0" prefWidth="84.0" promptText="23" />
+                                    <TextField fx:id="toMinute" layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="84.0" promptText="59">
+                                       <HBox.margin>
+                                          <Insets left="58.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label alignment="CENTER" prefHeight="16.0" prefWidth="83.0" text="Час" />
+                                    <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="16.0" prefWidth="83.0" text="Минута">
+                                       <HBox.margin>
+                                          <Insets left="58.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                 </children>
+                              </HBox>
                            </children>
-                        </HBox>
+                        </GridPane>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="72.0" prefWidth="274.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="192.0" text="Фильтр зданий">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
                         <HBox>
                            <children>
-                              <Label alignment="CENTER" prefHeight="16.0" prefWidth="83.0" text="Час" />
-                              <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="16.0" prefWidth="83.0" text="Минута">
+                              <ComboBox fx:id="buildingsComboBox" prefHeight="24.0" prefWidth="228.0">
                                  <HBox.margin>
-                                    <Insets left="58.0" />
-                                 </HBox.margin></Label>
+                                    <Insets top="5.0" />
+                                 </HBox.margin>
+                              </ComboBox>
                            </children>
                         </HBox>
                      </children>
-                  </GridPane>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </VBox>
                   <Button fx:id="updateButton" mnemonicParsing="false" onAction="#onUpdateButtonClick" prefHeight="38.0" prefWidth="228.0" text="Обновить список">
                      <VBox.margin>
                         <Insets top="5.0" />
@@ -163,34 +200,38 @@
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Label text="Управление турникетами">
+                  <VBox>
                      <VBox.margin>
                         <Insets top="40.0" />
                      </VBox.margin>
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="unlockEnterBarrier1Button" mnemonicParsing="false" onAction="#onUnlockBarrier1ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Открыть турникет 1">
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button fx:id="lockBarrier1Button" mnemonicParsing="false" onAction="#onLockBarrier1ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Закрыть турникет 1">
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button fx:id="unlockEnterBarrier2Button" mnemonicParsing="false" onAction="#onUnlockBarrier2ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Открыть турникет 2">
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button fx:id="lockBarrier2Button" layoutX="10.0" layoutY="453.0" mnemonicParsing="false" onAction="#onLockBarrier2ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Закрыть турникет 2">
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </Button>
+                     <children>
+                        <Label text="Управление турникетами">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="unlockEnterBarrier1Button" mnemonicParsing="false" onAction="#onUnlockBarrier1ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Открыть турникет 1">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="lockBarrier1Button" mnemonicParsing="false" onAction="#onLockBarrier1ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Закрыть турникет 1">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="unlockEnterBarrier2Button" mnemonicParsing="false" onAction="#onUnlockBarrier2ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Открыть турникет 2">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="lockBarrier2Button" mnemonicParsing="false" onAction="#onLockBarrier2ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Закрыть турникет 2">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
                </children>
                <VBox.margin>
                   <Insets left="15.0" top="20.0" />
@@ -200,9 +241,9 @@
       </VBox>
    </right>
    <bottom>
-      <VBox BorderPane.alignment="CENTER">
+      <VBox prefHeight="219.0" prefWidth="1126.0" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" prefHeight="21.0" prefWidth="1108.0" text="Информация о последнем отсканированном человеке" textAlignment="CENTER">
+            <Label alignment="CENTER" prefHeight="25.0" prefWidth="1126.0" text="Информация о последнем отсканированном человеке" textAlignment="CENTER">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -212,7 +253,7 @@
             </Label>
             <HBox prefHeight="193.0" prefWidth="1105.0">
                <children>
-                  <ImageView fitHeight="204.0" fitWidth="204.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fitHeight="190.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true" />
                   <VBox prefHeight="204.0" prefWidth="444.0">
                      <children>
                         <TextField fx:id="fullnameLPTextField" alignment="CENTER" editable="false" promptText="ФИО">
@@ -232,4 +273,7 @@
          </children>
       </VBox>
    </bottom>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
 </BorderPane>
