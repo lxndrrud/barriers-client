@@ -5,72 +5,60 @@ import com.acuvuz.BarriersDesktop.utils.DateTimeParser;
 import java.util.Arrays;
 
 public class MovementWithUser {
-    public int id;
-    public int id_building;
-    public String building_name;
-    public int id_event;
-    public String event_timestamp;
-    public String event_name;
-    public int id_student;
-    public int id_employee;
-
-    public String firstname;
-    public String middlename;
-    public String lastname;
-    public String skud_card;
-    public String type;
+    public Movement movement;
+    public User user;
 
     public int getId() {
-        return id;
+        return movement.getId();
     }
 
     public int getId_building() {
-        return id_building;
+        return movement.id_building;
     }
 
     public int getId_event() {
-        return id_event;
+        return movement.id_event;
     }
 
     public String getEvent_name() {
-        return event_name;
+        return movement.event_name;
     }
 
     public String getEvent_timestamp() {
-        return DateTimeParser.parseTimestamp(event_timestamp);
+        return DateTimeParser.parseTimestamp(movement.event_timestamp);
     }
 
     public int getId_student() {
-        return id_student;
+        return movement.id_student;
     }
 
     public int getId_employee() {
-        return id_employee;
+        return movement.id_employee;
     }
 
     public String getBuilding_name() {
-        return building_name;
+        return movement.building_name;
     }
 
     public String getFirstname() {
-        return firstname;
+        return user.firstname;
     }
 
     public String getMiddlename() {
-        return middlename;
+        return user.middlename;
     }
 
     public String getLastname() {
-        return lastname;
+        return user.lastname;
     }
 
     public String getSkud_card() {
-        return skud_card;
+        return user.skud_card;
     }
 
     public String getType() {
-        if (id_student != 0) return "Студент";
-        else if (id_employee != 0 ) return "Сотрудник";
+        if (movement.id_student != 0) return "Студент";
+        else if (movement.id_employee != 0 ) return "Сотрудник";
         else return "Гость";
     }
 }

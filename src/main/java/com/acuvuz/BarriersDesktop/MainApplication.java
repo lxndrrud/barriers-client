@@ -40,15 +40,15 @@ public class MainApplication extends Application {
 
     public void loadPorts(MainController mainController) {
         Dotenv dotenv = Dotenv.load();
-        String exitString = dotenv.get("EXIT_PORT_PATH", "default");
-        if (!exitString.equals("default")) {
-            barrier1Controller = new SerialPortController(exitString, mainController);
+        String barrier1String = dotenv.get("BARRIER_1_PORT", "default");
+        if (!barrier1String.equals("default")) {
+            barrier1Controller = new SerialPortController(barrier1String, mainController);
             mainController.setBarrier1PortController(barrier1Controller);
             barrier1Controller.run();
         }
-        String enterString = dotenv.get("ENTER_PORT_PATH", "default");
-        if (enterString != "default") {
-            barrier2Controller = new SerialPortController(enterString, mainController);
+        String barrier2String = dotenv.get("BARRIER_1_PORT", "default");
+        if (barrier2String != "default") {
+            barrier2Controller = new SerialPortController(barrier2String, mainController);
             mainController.setBarrier2PortController(barrier2Controller);
             barrier2Controller.run();
         }

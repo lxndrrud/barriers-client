@@ -138,14 +138,15 @@ public class MainController {
             Movement[] movements = null;
             var selectedMovement = (MovementWithUser) movementsTableView.getSelectionModel()
                     .getSelectedItem();
-            if (selectedMovement.id_student != 0 ) {
-                student = userService.getStudentInfo(selectedMovement.id_student);
+            if (selectedMovement == null ) return;
+            if (selectedMovement.getId_student() != 0 ) {
+                student = userService.getStudentInfo(selectedMovement.getId_student());
             }
-            else if (selectedMovement.id_employee != 0) {
-                employee = userService.getEmployeeInfo(selectedMovement.id_employee);
+            else if (selectedMovement.getId_employee() != 0) {
+                employee = userService.getEmployeeInfo(selectedMovement.getId_employee());
             }
-            movements = movementService.getMovementsForUser(selectedMovement.id_student,
-                    selectedMovement.id_employee,
+            movements = movementService.getMovementsForUser(selectedMovement.getId_student(),
+                    selectedMovement.getId_employee(),
                     datesArray.get(0), datesArray.get(1));
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader(MainApplication.class
