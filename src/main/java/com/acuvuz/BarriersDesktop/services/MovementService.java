@@ -29,7 +29,6 @@ public class MovementService {
 
     public MovementWithUser[] getAll(int id_building, String from, String to) {
         var link = this.root.getHost() + "/movements";
-
         try {
             var client = HttpClientBuilder.create().build();
             HttpGet httpGet = new HttpGet(link);
@@ -79,8 +78,10 @@ public class MovementService {
 
             HttpResponse response = client.execute(httpPost);
 
+            /*
             String data = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
             System.out.println(data);
+             */
 
             client.close();
             int returnCode = response.getStatusLine().getStatusCode();
@@ -136,104 +137,4 @@ public class MovementService {
             return new Movement[]{};
         }
     }
-
-    /*
-    private int getEmployeeInfoAndMovements(int id_employee, String from, String to) {
-        try {
-            getEmployeeInfo(id_employee);
-            return 0;
-        } catch (Exception e ) {
-            System.out.println(e);
-            return 1;
-        }
-    }
-
-    private int getStudentInfoAndMovements(int id_student, String from, String to) {
-        try {
-            getStudentInfo(id_student);
-            return 0;
-        } catch (Exception e ) {
-            System.out.println(e);
-            return 1;
-        }
-    }
-
-     */
-
-    /*
-    public static void main(String[] args) {
-        var movements = new MovementService();
-        try {
-            var result1 = movements.getStudentInfo(1);
-            System.out.println(result1.student.firstname);
-            System.out.println(result1.student.middlename);
-            System.out.println(result1.student.lastname);
-            System.out.println(result1.student.skud_card);
-            for (var item: result1.groups) {
-                System.out.println(item.id);
-                System.out.println(item.title);
-                System.out.println(item.department_title);
-            }
-
-            var result2 = movements.getEmployeeInfo(1);
-            System.out.println(result2.employee.firstname);
-            System.out.println(result2.employee.middlename);
-            System.out.println(result2.employee.lastname);
-            System.out.println(result2.employee.skud_card);
-            for (var item: result2.positions) {
-                System.out.println(item.id);
-                System.out.println(item.title);
-                System.out.println(item.department_title);
-                System.out.println(item.date_drop);
-            }
-
-            var all = movements
-                    .getAll(1, "14.04.2022T15:00", "");
-
-            int i=0;
-            for (var move: all) {
-                var get = movements.getMovementsForUser(move.id_student, move.id_employee, "14.04.2022T15:00", "");
-                for (var getted: get) {
-                    System.out.println(getted.building_name);
-                    System.out.println(getted.event_name);
-                    System.out.println(getted.event_timestamp);
-                    System.out.println(getted.id_student);
-                    System.out.println(getted.id_employee);
-                    System.out.println("");
-                    System.out.println("");
-                }
-            }
-
-
-        } catch (Exception e) {
-            System.out.println("Обосрался!");
-        }
-    }
-
-
-
-    private void sendPersonalMovementsRequest(MovementWithUser movementWithUser, String from, String to) {
-        try {
-            if (movementWithUser.id_employee != 0) {
-                var employeeInfo = getEmployeeInfo(movementWithUser.id_employee);
-                //getEmployeeInfoAndMovements(movementWithUser.id_employee, from, to);
-
-            }
-            else if (movementWithUser.id_student != 0) {
-                var studentInfo = getStudentInfo(movementWithUser.id_student);
-                //returnCode = getStudentInfoAndMovements(movementWithUser.id_student, from, to);
-            }
-            var movements = getMovementsForUser(1, 0, from, to);
-
-
-        } catch (Exception e ) {
-            System.out.println("Ошибка при запросе на сервер");
-        }
-    }
-
-
-     */
-
-
-
 }

@@ -25,6 +25,7 @@ public class MainApplication extends Application {
             loadPorts(mainController);
             mainController.loadBuildings();
             mainController.updateMovements();
+            mainController.initDates();
             stage.show();
         } catch (Exception e) {
             System.out.println(e);

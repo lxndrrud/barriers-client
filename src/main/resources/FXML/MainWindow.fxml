@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="882.0" prefWidth="1146.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.acuvuz.BarriersDesktop.controllers.MainController">
+<BorderPane prefHeight="882.0" prefWidth="1146.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.acuvuz.BarriersDesktop.controllers.MainController">
    <center>
       <TableView fx:id="movementsTableView" prefHeight="464.0" prefWidth="643.0" BorderPane.alignment="CENTER">
         <columns>
@@ -82,7 +82,7 @@
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <DatePicker fx:id="fromDate" prefHeight="24.0" prefWidth="228.0" promptText="сегодня" />
+                        <DatePicker fx:id="fromDate" prefHeight="24.0" prefWidth="228.0" />
                         <GridPane>
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -94,8 +94,8 @@
                            <children>
                               <HBox GridPane.rowIndex="1">
                                  <children>
-                                    <TextField fx:id="fromHour" prefHeight="24.0" prefWidth="84.0" promptText="00" />
-                                    <TextField fx:id="fromMinute" layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="84.0" promptText="00">
+                                    <TextField fx:id="fromHour" prefHeight="24.0" prefWidth="84.0" />
+                                    <TextField fx:id="fromMinute" layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="84.0">
                                        <HBox.margin>
                                           <Insets left="58.0" />
                                        </HBox.margin>
@@ -104,10 +104,13 @@
                               </HBox>
                               <HBox>
                                  <children>
-                                    <Label alignment="CENTER" prefHeight="16.0" prefWidth="83.0" text="Час" />
+                                    <Label alignment="CENTER" prefHeight="16.0" prefWidth="83.0" text="Час">
+                                       <HBox.margin>
+                                          <Insets top="2.0" />
+                                       </HBox.margin></Label>
                                     <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="16.0" prefWidth="83.0" text="Минута">
                                        <HBox.margin>
-                                          <Insets left="58.0" />
+                                          <Insets left="58.0" top="2.0" />
                                        </HBox.margin>
                                     </Label>
                                  </children>
@@ -129,7 +132,7 @@
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <DatePicker fx:id="toDate" prefHeight="24.0" prefWidth="228.0" promptText="сегодня" />
+                        <DatePicker fx:id="toDate" prefHeight="24.0" prefWidth="228.0" />
                         <GridPane>
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -141,8 +144,8 @@
                            <children>
                               <HBox GridPane.rowIndex="1">
                                  <children>
-                                    <TextField fx:id="toHour" prefHeight="24.0" prefWidth="84.0" promptText="23" />
-                                    <TextField fx:id="toMinute" layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="84.0" promptText="59">
+                                    <TextField fx:id="toHour" prefHeight="24.0" prefWidth="84.0" />
+                                    <TextField fx:id="toMinute" layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="84.0">
                                        <HBox.margin>
                                           <Insets left="58.0" />
                                        </HBox.margin>
@@ -151,10 +154,13 @@
                               </HBox>
                               <HBox>
                                  <children>
-                                    <Label alignment="CENTER" prefHeight="16.0" prefWidth="83.0" text="Час" />
+                                    <Label alignment="CENTER" prefHeight="16.0" prefWidth="83.0" text="Час">
+                                       <HBox.margin>
+                                          <Insets top="2.0" />
+                                       </HBox.margin></Label>
                                     <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="16.0" prefWidth="83.0" text="Минута">
                                        <HBox.margin>
-                                          <Insets left="58.0" />
+                                          <Insets left="58.0" top="2.0" />
                                        </HBox.margin>
                                     </Label>
                                  </children>
@@ -205,31 +211,74 @@
                         <Insets top="40.0" />
                      </VBox.margin>
                      <children>
-                        <Label text="Управление турникетами">
+                        <Label alignment="CENTER" prefHeight="20.0" prefWidth="282.0" text="Управление турникетами">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
                         </Label>
-                        <Button fx:id="unlockEnterBarrier1Button" mnemonicParsing="false" onAction="#onUnlockBarrier1ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Открыть турникет 1">
+                        <HBox prefHeight="151.0" prefWidth="274.0">
+                           <children>
+                              <VBox>
+                                 <children>
+                                    <Label alignment="CENTER" prefHeight="16.0" prefWidth="151.0" text="Турникет 1" textAlignment="CENTER" />
+                                    <Button fx:id="unlockEnterBarrier1Button" mnemonicParsing="false" onAction="#onUnlockBarrier1ButtonClick" prefHeight="24.0" prefWidth="150.0" text="Открыть 1">
+                                       <VBox.margin>
+                                          <Insets top="3.0" />
+                                       </VBox.margin>
+                                    </Button>
+                                    <Button fx:id="lockBarrier1Button" mnemonicParsing="false" onAction="#onLockBarrier1ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Закрыть 1">
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </Button>
+                                    <Button fx:id="openPort1Button" mnemonicParsing="false" onAction="#onOpenPort1ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Открыть порт 1">
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </Button>
+                                    <Button fx:id="closePort1Button" mnemonicParsing="false" onAction="#onClosePort1ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Закрыть порт 1">
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </Button>
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="151.0" prefWidth="212.0">
+                                 <children>
+                                    <Label alignment="CENTER" prefHeight="16.0" prefWidth="133.0" text="Турникет 2" />
+                                    <Button fx:id="unlockEnterBarrier2Button" mnemonicParsing="false" onAction="#onUnlockBarrier2ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Открыть 2">
+                                       <VBox.margin>
+                                          <Insets top="3.0" />
+                                       </VBox.margin>
+                                    </Button>
+                                    <Button fx:id="lockBarrier2Button" mnemonicParsing="false" onAction="#onLockBarrier2ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Закрыть 2">
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </Button>
+                                    <Button fx:id="openPort2Button" alignment="CENTER" mnemonicParsing="false" onAction="#onOpenPort2ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Открыть порт 2">
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </Button>
+                                    <Button fx:id="closePort2Button" mnemonicParsing="false" onAction="#onClosePort2ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Закрыть порт 2">
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </Button>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets left="2.0" />
+                                 </HBox.margin>
+                              </VBox>
+                           </children>
                            <VBox.margin>
-                              <Insets top="10.0" />
+                              <Insets top="5.0" />
                            </VBox.margin>
-                        </Button>
-                        <Button fx:id="lockBarrier1Button" mnemonicParsing="false" onAction="#onLockBarrier1ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Закрыть турникет 1">
-                           <VBox.margin>
-                              <Insets top="10.0" />
-                           </VBox.margin>
-                        </Button>
-                        <Button fx:id="unlockEnterBarrier2Button" mnemonicParsing="false" onAction="#onUnlockBarrier2ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Открыть турникет 2">
-                           <VBox.margin>
-                              <Insets top="10.0" />
-                           </VBox.margin>
-                        </Button>
-                        <Button fx:id="lockBarrier2Button" mnemonicParsing="false" onAction="#onLockBarrier2ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Закрыть турникет 2">
-                           <VBox.margin>
-                              <Insets top="10.0" />
-                           </VBox.margin>
-                        </Button>
+                        </HBox>
                      </children>
                   </VBox>
                </children>
@@ -265,6 +314,9 @@
                            <font>
                               <Font size="16.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
                         </TextField>
                      </children>
                   </VBox>

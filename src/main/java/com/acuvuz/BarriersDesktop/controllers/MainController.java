@@ -15,6 +15,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 
 public class MainController {
     public Button updateButton;
@@ -56,47 +60,34 @@ public class MainController {
 
     public void onUnlockBarrier1ButtonClick() {
         barrier1PortController.unlockBarrier();
-        /*
-        movementService.createMovementAction(
-                ParsedPortData.createGuestParsedPortData("enter")
-        );
-
-         */
-        //updateMovements();
     }
     public void onLockBarrier1ButtonClick() {
         barrier1PortController.lockBarrier();
-        /*
-        movementService.createMovementAction(
-                ParsedPortData.createGuestParsedPortData("exit")
-        );
-
-         */
-        //updateMovements();
     }
 
     public void onUnlockBarrier2ButtonClick() {
         barrier2PortController.unlockBarrier();
-        /*
-        movementService.createMovementAction(
-                ParsedPortData.createGuestParsedPortData("enter")
-        );
-
-         */
-        //updateMovements();
     }
 
     public void onLockBarrier2ButtonClick() {
         barrier2PortController.lockBarrier();
-        /*
-        movementService.createMovementAction(
-                ParsedPortData.createGuestParsedPortData("exit")
-        );
-         */
-        //updateMovements();
     }
 
+    public void onOpenPort1ButtonClick() {
+        barrier1PortController.openPort();
+    }
 
+    public void onClosePort1ButtonClick() {
+        barrier1PortController.closePort();
+    }
+
+    public void onOpenPort2ButtonClick() {
+        barrier2PortController.openPort();
+    }
+
+    public void onClosePort2ButtonClick() {
+        barrier2PortController.closePort();
+    }
 
     public void updateMovements() {
         var datesArray = DateTimeParser.parseMovementInterval(
@@ -166,10 +157,8 @@ public class MainController {
             }
             else if (employee != null) {
                 controller.setEmployee(employee);
-            } else {
-                controller.setGuest();
             }
-
+            controller.initDates();
             controller.setMovements(movements);
             modalStage.showAndWait();
         } catch (Exception e) {
@@ -192,6 +181,15 @@ public class MainController {
         buildingsComboBox.setItems(buildingsList);
         buildingsComboBox.getSelectionModel().select(index);
 
+    }
+
+    public void initDates() {
+        fromDate.setValue(LocalDate.now());
+        fromHour.setText("00");
+        fromMinute.setText("00");
+        toDate.setValue(LocalDate.now().plusDays(1));
+        toHour.setText("00");
+        toMinute.setText("00");
     }
 
     public MainController() {

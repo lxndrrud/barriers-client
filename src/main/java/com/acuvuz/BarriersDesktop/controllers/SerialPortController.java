@@ -5,10 +5,7 @@ import com.acuvuz.BarriersDesktop.JSONMappers.User;
 import com.acuvuz.BarriersDesktop.services.MovementService;
 import com.acuvuz.BarriersDesktop.services.UserService;
 import com.fazecast.jSerialComm.*;
-import io.github.cdimascio.dotenv.Dotenv;
-
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 
 
 public class SerialPortController {
@@ -28,6 +25,12 @@ public class SerialPortController {
 
     public void closePort() {
         port.closePort();
+    }
+
+    public void openPort() {
+        if (!thread.isAlive()) {
+            run();
+        }
     }
 
     public void listenToPort() {
@@ -63,17 +66,14 @@ public class SerialPortController {
                             actionPerfomed = true;
                             break;
                         }
-                        /*
-                        else if (fromPort.equals("exit-fail")) {
-                            System.out.println("giga fail");
-                            int returnCode = movementService.createFailMovementAction(portData);
+                        else if (fromPort.equals(parsedData.getReader() + "-fail")) {
+                            int returnCode = movementService.createFailMovementAction(parsedData);
                             if (returnCode != 201) {
                                 System.out.println("Произошла ошибка!");
                             }
+                            actionPerfomed = true;
                             break;
                         }
-
-                         */
                         Thread.sleep(10);
                     }
                     if (!actionPerfomed) {
@@ -144,12 +144,5 @@ public class SerialPortController {
             return "";
         }
         return new String(readBuffer, StandardCharsets.UTF_8).trim();
-    }
-
-
-
-    public static void main(String[] args) {
-        SerialPortController portController = new SerialPortController("EXIT_PORT_PATH", null);
-        portController.writeToPort("1");
     }
 }

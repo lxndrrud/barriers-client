@@ -6,5 +6,6 @@ public class User {
     public String middlename;
     public String lastname;
     public String skud_card;
+    public String photo_path;
     public String type;
 }

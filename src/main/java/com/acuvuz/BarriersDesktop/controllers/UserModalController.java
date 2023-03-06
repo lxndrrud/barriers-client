@@ -107,16 +107,19 @@ public class UserModalController {
         positionsPane.setContent(scrollPane);
     }
 
-    public void setGuest() {
-        fullnameTextField.setText("Гость");
-        cardTextField.setText("Отсутствует");
-        typeTextField.setText("Гость");
-    }
-
     public void setMovements(Movement[] movements) {
         this.movements = movements;
         movementsTableView.getItems().removeAll();
         ObservableList<Movement> movementsList = FXCollections.observableArrayList(movements);
         movementsTableView.setItems(movementsList);
+    }
+
+    public void initDates() {
+        fromDate.setValue(LocalDate.now());
+        fromHour.setText("00");
+        fromMinute.setText("00");
+        toDate.setValue(LocalDate.now().plusDays(1));
+        toHour.setText("00");
+        toMinute.setText("00");
     }
 }

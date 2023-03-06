@@ -20,7 +20,6 @@ public class UserService {
     }
 
     public User sendSkudCardInfo(String code) {
-        //String reader = variables[1].split("=")[1];
         try {
             var client = HttpClientBuilder.create().build();
             HttpGet httpGet = new HttpGet(this.root.getHost() + "/users/skudCard");
