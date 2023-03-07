@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.acuvuz.BarriersDesktop.controllers.MainController;
 import com.acuvuz.BarriersDesktop.controllers.SerialPortController;
+import com.acuvuz.BarriersDesktop.utils.DotenvProvider;
 import io.github.cdimascio.dotenv.Dotenv;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +14,7 @@ import javafx.stage.Stage;
 public class MainApplication extends Application {
     SerialPortController barrier1Controller;
     SerialPortController barrier2Controller;
+    DotenvProvider dotenvProvider;
     @Override
     public void start(Stage stage) throws IOException {
         try {
@@ -20,6 +22,8 @@ public class MainApplication extends Application {
                     .getResource("/FXML/MainWindow.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 1600, 900);
             stage.setTitle("Турникеты ЛГПУ");
+            stage.setFullScreen(true);
+            stage.setMaximized(true);
             stage.setScene(scene);
             MainController mainController = fxmlLoader.getController();
             loadPorts(mainController);
@@ -39,20 +43,18 @@ public class MainApplication extends Application {
 
     }
 
+
+
     public void loadPorts(MainController mainController) {
-        Dotenv dotenv = Dotenv.load();
-        String barrier1String = dotenv.get("BARRIER_1_PORT", "default");
-        if (!barrier1String.equals("default")) {
-            barrier1Controller = new SerialPortController(barrier1String, mainController);
-            mainController.setBarrier1PortController(barrier1Controller);
-            barrier1Controller.run();
-        }
-        String barrier2String = dotenv.get("BARRIER_1_PORT", "default");
-        if (barrier2String != "default") {
-            barrier2Controller = new SerialPortController(barrier2String, mainController);
-            mainController.setBarrier2PortController(barrier2Controller);
-            barrier2Controller.run();
-        }
+        dotenvProvider = new DotenvProvider();
+
+        String port1 = dotenvProvider.getBarrier1Port();
+        barrier1Controller = new SerialPortController(port1, mainController);
+        mainController.setBarrier1PortController(barrier1Controller);
+
+        String port2 = dotenvProvider.getBarrier1Port();
+        barrier2Controller = new SerialPortController(port2, mainController);
+        mainController.setBarrier2PortController(barrier2Controller);
     }
 
     @Override

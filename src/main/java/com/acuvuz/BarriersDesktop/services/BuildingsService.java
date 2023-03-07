@@ -1,7 +1,7 @@
 package com.acuvuz.BarriersDesktop.services;
 
 import com.acuvuz.BarriersDesktop.JSONMappers.Building;
-import com.acuvuz.BarriersDesktop.JSONMappers.MovementWithUser;
+import com.acuvuz.BarriersDesktop.utils.DotenvProvider;
 import com.google.gson.Gson;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -13,13 +13,13 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
 public class BuildingsService {
-    private final RootService root;
+    private final DotenvProvider dotenvProvider;
     public BuildingsService() {
-        this.root = RootService.getInstance();
+        this.dotenvProvider = new DotenvProvider();
     }
 
     public Building[] GetAll() {
-        var link = this.root.getHost() + "/buildings";
+        var link = this.dotenvProvider.getHost() + "/buildings";
         try {
             var client = HttpClientBuilder.create().build();
             HttpGet httpGet = new HttpGet(link);

@@ -1,11 +1,10 @@
 package com.acuvuz.BarriersDesktop.controllers;
 
-import com.acuvuz.BarriersDesktop.DTO.ParsedPortData;
 import com.acuvuz.BarriersDesktop.JSONMappers.*;
 import com.acuvuz.BarriersDesktop.MainApplication;
 import com.acuvuz.BarriersDesktop.services.BuildingsService;
 import com.acuvuz.BarriersDesktop.services.MovementService;
-import com.acuvuz.BarriersDesktop.services.RootService;
+import com.acuvuz.BarriersDesktop.utils.DotenvProvider;
 import com.acuvuz.BarriersDesktop.services.UserService;
 import com.acuvuz.BarriersDesktop.utils.DateTimeParser;
 import javafx.collections.FXCollections;
@@ -13,11 +12,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 
 public class MainController {
@@ -39,9 +37,12 @@ public class MainController {
     public TextField fullnameLPTextField;
     public TextField typeLPTextField;
 
+    public ImageView lastPersonPhoto;
+
     private final MovementService movementService;
     private final BuildingsService buildingsService;
     private final UserService userService;
+    private final DotenvProvider dotenvProvider;
 
     private SerialPortController barrier1PortController;
     private SerialPortController barrier2PortController;
@@ -74,16 +75,14 @@ public class MainController {
     }
 
     public void onOpenPort1ButtonClick() {
-        barrier1PortController.openPort();
+        barrier1PortController.run();
     }
 
     public void onClosePort1ButtonClick() {
         barrier1PortController.closePort();
     }
 
-    public void onOpenPort2ButtonClick() {
-        barrier2PortController.openPort();
-    }
+    public void onOpenPort2ButtonClick() { barrier2PortController.run(); }
 
     public void onClosePort2ButtonClick() {
         barrier2PortController.closePort();
@@ -113,6 +112,10 @@ public class MainController {
                 + " " +user.middlename
         );
         typeLPTextField.setText(user.type);
+        var thread = new Thread(() -> {
+            lastPersonPhoto.setImage(new Image(dotenvProvider.getPhotoHost() + "/" + user.photo_path));
+        });
+        thread.start();
     }
 
 
@@ -126,7 +129,6 @@ public class MainController {
 
             Student student = null;
             Employee employee = null;
-            Movement[] movements = null;
             var selectedMovement = (MovementWithUser) movementsTableView.getSelectionModel()
                     .getSelectedItem();
             if (selectedMovement == null ) return;
@@ -136,7 +138,7 @@ public class MainController {
             else if (selectedMovement.getId_employee() != 0) {
                 employee = userService.getEmployeeInfo(selectedMovement.getId_employee());
             }
-            movements = movementService.getMovementsForUser(selectedMovement.getId_student(),
+            Movement[] movements = movementService.getMovementsForUser(selectedMovement.getId_student(),
                     selectedMovement.getId_employee(),
                     datesArray.get(0), datesArray.get(1));
             // Load the fxml file and create a new stage for the popup dialog.
@@ -146,7 +148,7 @@ public class MainController {
             Stage modalStage = new Stage();
 
             // Create the dialog Stage.
-            Scene scene = new Scene(loader.load(), 1200, 800);
+            Scene scene = new Scene(loader.load(), 900, 600);
             modalStage.setTitle("Информация о человеке");
             modalStage.setScene(scene);
 
@@ -170,17 +172,16 @@ public class MainController {
     public void loadBuildings() {
         buildingsComboBox.getItems().removeAll();
         var buildingsList = FXCollections
-                .observableArrayList(buildingsService.GetAll());
+            .observableArrayList( buildingsService.GetAll());
         int index = 0;
         for (var b: buildingsList) {
-            if (b.id == RootService.getInstance().getIdBuilding()) {
+            if (b.id == dotenvProvider.getIdBuilding()) {
                 break;
             }
             index++;
         }
         buildingsComboBox.setItems(buildingsList);
         buildingsComboBox.getSelectionModel().select(index);
-
     }
 
     public void initDates() {
@@ -196,5 +197,6 @@ public class MainController {
         movementService = new MovementService();
         buildingsService = new BuildingsService();
         userService = new UserService();
+        dotenvProvider = new DotenvProvider();
     }
 }

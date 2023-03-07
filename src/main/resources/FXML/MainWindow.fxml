@@ -302,7 +302,7 @@
             </Label>
             <HBox prefHeight="193.0" prefWidth="1105.0">
                <children>
-                  <ImageView fitHeight="190.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="lastPersonPhoto" fitHeight="190.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true" />
                   <VBox prefHeight="204.0" prefWidth="444.0">
                      <children>
                         <TextField fx:id="fullnameLPTextField" alignment="CENTER" editable="false" promptText="ФИО">

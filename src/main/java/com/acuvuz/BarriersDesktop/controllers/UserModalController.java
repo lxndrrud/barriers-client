@@ -2,23 +2,22 @@ package com.acuvuz.BarriersDesktop.controllers;
 
 import com.acuvuz.BarriersDesktop.JSONMappers.Employee;
 import com.acuvuz.BarriersDesktop.JSONMappers.Movement;
-import com.acuvuz.BarriersDesktop.JSONMappers.MovementWithUser;
 import com.acuvuz.BarriersDesktop.JSONMappers.Student;
+import com.acuvuz.BarriersDesktop.utils.DotenvProvider;
 import com.acuvuz.BarriersDesktop.services.MovementService;
 import com.acuvuz.BarriersDesktop.utils.DateTimeParser;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class UserModalController {
     final MovementService movementService;
+    final DotenvProvider dotenvProvider;
 
     Student student;
     Employee employee;
@@ -42,11 +41,13 @@ public class UserModalController {
     public DatePicker toDate;
     public TextField toHour;
     public TextField toMinute;
+    public ImageView userPhoto;
 
 
 
     public UserModalController() {
         movementService = new MovementService();
+        dotenvProvider = new DotenvProvider();
     }
 
     public void onUpdateButtonClick() {
@@ -85,6 +86,10 @@ public class UserModalController {
         }
         scrollPane.setContent(vbox);
         groupsPane.setContent(scrollPane);
+        var thread = new Thread(() -> {
+            userPhoto.setImage(new Image(dotenvProvider.getPhotoHost() + "/" + student.student.photo_path));
+        });
+        thread.start();
     }
     public void setEmployee(Employee employee) {
         this.employee = employee;
@@ -105,6 +110,10 @@ public class UserModalController {
         }
         scrollPane.setContent(vbox);
         positionsPane.setContent(scrollPane);
+        var thread = new Thread(() -> {
+            userPhoto.setImage(new Image(dotenvProvider.getPhotoHost() + "/" + employee.employee.photo_path));
+        });
+        thread.start();
     }
 
     public void setMovements(Movement[] movements) {

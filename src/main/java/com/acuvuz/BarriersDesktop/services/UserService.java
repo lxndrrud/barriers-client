@@ -3,6 +3,7 @@ package com.acuvuz.BarriersDesktop.services;
 import com.acuvuz.BarriersDesktop.JSONMappers.Employee;
 import com.acuvuz.BarriersDesktop.JSONMappers.Student;
 import com.acuvuz.BarriersDesktop.JSONMappers.User;
+import com.acuvuz.BarriersDesktop.utils.DotenvProvider;
 import com.google.gson.Gson;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -14,15 +15,15 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
 public class UserService {
-    private final RootService root;
+    private final DotenvProvider dotenvProvider;
     public UserService() {
-        this.root = RootService.getInstance();
+        dotenvProvider = new DotenvProvider();
     }
 
     public User sendSkudCardInfo(String code) {
         try {
             var client = HttpClientBuilder.create().build();
-            HttpGet httpGet = new HttpGet(this.root.getHost() + "/users/skudCard");
+            HttpGet httpGet = new HttpGet(dotenvProvider.getHost() + "/users/skudCard");
             URI uri = new URIBuilder(httpGet.getURI())
                     .addParameter("skud_card", code)
                     .build();
@@ -47,7 +48,7 @@ public class UserService {
     public Student getStudentInfo(int id_student) throws Exception {
         var client = HttpClientBuilder.create().build();
         try {
-            HttpGet httpGet = new HttpGet(this.root.getHost() + "/users/student");
+            HttpGet httpGet = new HttpGet(dotenvProvider.getHost() + "/users/student");
             URI uri = new URIBuilder(httpGet.getURI())
                     .addParameter("id_student", Integer.toString(id_student))
                     .build();
@@ -77,7 +78,7 @@ public class UserService {
     public Employee getEmployeeInfo(int id_employee) throws Exception {
         var client = HttpClientBuilder.create().build();
         try {
-            HttpGet httpGet = new HttpGet(this.root.getHost() + "/users/employee");
+            HttpGet httpGet = new HttpGet(dotenvProvider.getHost() + "/users/employee");
             URI uri = new URIBuilder(httpGet.getURI())
                     .addParameter("id_employee", Integer.toString(id_employee))
                     .build();

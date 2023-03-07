@@ -2,6 +2,7 @@ package com.acuvuz.BarriersDesktop.services;
 
 import com.acuvuz.BarriersDesktop.DTO.ParsedPortData;
 import com.acuvuz.BarriersDesktop.JSONMappers.*;
+import com.acuvuz.BarriersDesktop.utils.DotenvProvider;
 import com.google.gson.Gson;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -21,14 +22,14 @@ import java.util.List;
 
 
 public class MovementService {
-    private final RootService root;
+    private final DotenvProvider dotenvProvider;
 
     public MovementService() {
-        this.root = RootService.getInstance();
+        this.dotenvProvider = new DotenvProvider();
     }
 
     public MovementWithUser[] getAll(int id_building, String from, String to) {
-        var link = this.root.getHost() + "/movements";
+        var link = this.dotenvProvider.getHost() + "/movements";
         try {
             var client = HttpClientBuilder.create().build();
             HttpGet httpGet = new HttpGet(link);
@@ -67,10 +68,10 @@ public class MovementService {
         try {
             var client = HttpClientBuilder.create().build();
 
-            HttpPost httpPost = new HttpPost(this.root.getHost() + "/movements/action");
+            HttpPost httpPost = new HttpPost(this.dotenvProvider.getHost() + "/movements/action");
 
             List<NameValuePair> params = new ArrayList<>();
-            params.add(new BasicNameValuePair("id_building", Integer.toString(this.root.getIdBuilding())));
+            params.add(new BasicNameValuePair("id_building", Integer.toString(this.dotenvProvider.getIdBuilding())));
             params.add(new BasicNameValuePair("event", event));
             params.add(new BasicNameValuePair("skud_card", skudCard));
 
@@ -96,7 +97,7 @@ public class MovementService {
     public Movement[] getMovementsForUser(int idStudent, int idEmployee, String from, String to) {
         var client = HttpClientBuilder.create().build();
         try {
-            HttpGet httpGet = new HttpGet(this.root.getHost() + "/movements/user");
+            HttpGet httpGet = new HttpGet(this.dotenvProvider.getHost() + "/movements/user");
             var uriBuilder = new URIBuilder(httpGet.getURI());
             if (idStudent != 0) {
                 uriBuilder
