@@ -3,6 +3,7 @@ package com.acuvuz.BarriersDesktop.JSONMappers;
 import com.acuvuz.BarriersDesktop.utils.DateTimeParser;
 
 public class Movement {
+    final DateTimeParser dateTimeParser;
     public int id;
     public int id_building;
     public String building_name;
@@ -25,6 +26,11 @@ public class Movement {
     }
 
     public String getEvent_timestamp() {
-        return DateTimeParser.parseTimestamp(event_timestamp);
+        return dateTimeParser.parseTimestamp(event_timestamp);
     }
+
+    public Movement() {
+        dateTimeParser = new DateTimeParser();
+    }
+
 }

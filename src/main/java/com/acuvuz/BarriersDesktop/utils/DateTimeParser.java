@@ -10,7 +10,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class DateTimeParser {
-    public static String parseMovementIntervalFromElements(Boolean isFrom,
+    public DateTimeParser() {
+        alertModalCreator = new AlertModalCreator();
+    }
+    final AlertModalCreator alertModalCreator;
+    public String parseMovementIntervalFromElements(Boolean isFrom,
                                                            // This boolean is only for "To" time field
                                                            Boolean todayDefault,
                                                            DatePicker datePicker, TextField hourField, TextField minuteField) {
@@ -19,8 +23,10 @@ public class DateTimeParser {
 
         // DATE
         if (localDate != null) {
-            resultString = localDate.getDayOfMonth() + "." +
-                    localDate.getMonthValue() + "." +
+            var day = localDate.getDayOfMonth() < 10 ? "0" + localDate.getDayOfMonth(): localDate.getDayOfMonth();
+            var month = localDate.getMonthValue() < 10 ? "0" + localDate.getMonthValue(): localDate.getMonthValue();
+            resultString = day + "." +
+                    month + "." +
                     localDate.getYear() + "T";
         }
         else {
@@ -31,7 +37,7 @@ public class DateTimeParser {
         //HOUR
         if (hourField.getText().length() != 0) {
             if (hourField.getText().matches("\\D")) {
-                AlertModalCreator.createAlertModalWindow("Ошибка!", "Ошибка в поле часов фильтра 'От'!",
+                alertModalCreator.createAlertModalWindow("Ошибка!", "Ошибка в поле часов фильтра 'От'!",
                         "Вы ввели нечисловое значение!");
             }
 
@@ -47,7 +53,7 @@ public class DateTimeParser {
         //MINUTE
         if (minuteField.getText().length() != 0) {
             if (minuteField.getText().matches("\\D")) {
-                AlertModalCreator.createAlertModalWindow("Ошибка!", "Ошибка в поле минут фильтра 'От'!",
+                alertModalCreator.createAlertModalWindow("Ошибка!", "Ошибка в поле минут фильтра 'От'!",
                         "Вы ввели нечисловое значение!");
             }
 
@@ -62,7 +68,7 @@ public class DateTimeParser {
 
         return resultString;
     }
-    public static ArrayList<String> parseMovementInterval(
+    public ArrayList<String> parseMovementInterval(
                                 Boolean todayDefault,
                                 DatePicker fromDate, TextField fromHour, TextField fromMinute,
                                DatePicker toDate, TextField toHour, TextField toMinute) {
@@ -79,15 +85,15 @@ public class DateTimeParser {
         return result;
     }
 
-    public static String getTodayDateDefaultValue() {
+    public String getTodayDateDefaultValue() {
         return new SimpleDateFormat("dd.MM.yyyy").format(Timestamp.from(Instant.now())) + "T";
     }
 
-    public static String get1980DateDefaultValue() {
+    public String get1980DateDefaultValue() {
         return "01.01.1980T";
     }
 
-    public static String parseTimestamp(String timestamp) {
+    public String parseTimestamp(String timestamp) {
         String date = timestamp.split("T")[0];
         var splittedDate = date.split("-");
         String parsedDate = splittedDate[2] + "." +

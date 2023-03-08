@@ -4,6 +4,7 @@ import com.acuvuz.BarriersDesktop.DTO.ParsedPortData;
 import com.acuvuz.BarriersDesktop.JSONMappers.User;
 import com.acuvuz.BarriersDesktop.services.MovementService;
 import com.acuvuz.BarriersDesktop.services.UserService;
+import com.acuvuz.BarriersDesktop.utils.AlertModalCreator;
 import com.fazecast.jSerialComm.*;
 import java.nio.charset.StandardCharsets;
 
@@ -12,14 +13,19 @@ public class SerialPortController {
     private final MainController mainController;
     private final MovementService movementService;
     private final UserService userService;
+
+    private final AlertModalCreator alertModalCreator;
     private SerialPort port;
+    private String portDescriptor;
 
     private Thread thread;
 
     public SerialPortController(String portDescriptor, MainController mainController1) {
         movementService = new MovementService();
         userService = new UserService();
+        alertModalCreator = new AlertModalCreator();
         mainController = mainController1;
+        this.portDescriptor = portDescriptor;
         port = SerialPort.getCommPort(portDescriptor);
     }
 
@@ -36,57 +42,72 @@ public class SerialPortController {
     public void listenToPort() {
         port.setBaudRate(9600);
         port.openPort();
-        try {
-            while (port.isOpen()) {
+
+        while (port.isOpen()) {
+            try {
                 String portData = readFromPort();
-                if (portData.contains("@Code") && portData.contains("@Direction")) {
-                    var parsedData = new ParsedPortData(portData);
+                if (!(portData.contains("@Code") && portData.contains("@Direction"))) continue;
+                var parsedData = new ParsedPortData(portData);
 
-                    User user = userService.sendSkudCardInfo(parsedData.getCode());
-                    if (user.id == 0) {
-                        alarmBarrier(parsedData.getReader());
-                        continue;
-                    }
-                    mainController.setLastPersonInfo(user);
-
-                    boolean actionPerfomed = false;
-                    openBarrierForUser(parsedData.getReader());
-                    // 350 * 10 = 3,5 секунды на проход,
-                    // ~80 - оптимальная задержка, при которой сначала закрывается турникет, а потом шлется сигнал
-                    // о неудачном проходе. Каждые 10 милисекунд прослушивается сериал порт
-                    for (int i=0; i < 350 + 100; i++) {
-                        String fromPort = readFromPort();
-                        // enter or exit success
-                        if (fromPort.equals(parsedData.getReader() + "-success")) {
-                            int returnCode = movementService
-                                    .createMovementAction(parsedData);
-                            if (returnCode != 201) {
-                                System.out.println("Произошла ошибка!");
-                            }
-                            actionPerfomed = true;
-                            break;
-                        }
-                        else if (fromPort.equals(parsedData.getReader() + "-fail")) {
-                            int returnCode = movementService.createFailMovementAction(parsedData);
-                            if (returnCode != 201) {
-                                System.out.println("Произошла ошибка!");
-                            }
-                            actionPerfomed = true;
-                            break;
-                        }
-                        Thread.sleep(10);
-                    }
-                    if (!actionPerfomed) {
-                        movementService.createFailMovementAction(parsedData);
-                    }
-                    mainController.updateMovements();
-
+                User user = userService.sendSkudCardInfo(parsedData.getCode());
+                if (user.id == 0) {
+                    alarmBarrier(parsedData.getReader());
+                    alertModalCreator.createAlertModalWindow(
+                            "Ошибка", "Пользователь не найден!", ""
+                    );
+                    continue;
                 }
+                mainController.setLastPersonInfo(user);
+
+                boolean actionPerfomed = false;
+                openBarrierForUser(parsedData.getReader());
+                // 350 * 10 = 3,5 секунды на проход,
+                // ~80 - оптимальная задержка, при которой сначала закрывается турникет, а потом шлется сигнал
+                // о неудачном проходе. Каждые 10 милисекунд прослушивается сериал порт
+                for (int i = 0; i < 350 + 100; i++) {
+                    String fromPort = readFromPort();
+                    // enter or exit success
+                    if (fromPort.equals(parsedData.getReader() + "-success")) {
+                        int returnCode = movementService
+                                .createMovementAction(parsedData);
+                        if (returnCode != 201) {
+                            alertModalCreator.createAlertModalWindow(
+                                    "Ошибка",
+                                    "Ошибка во время работа турникета",
+                                    "Перемещение человека не записано!");
+
+                        }
+                        actionPerfomed = true;
+                        break;
+                    } else if (fromPort.equals(parsedData.getReader() + "-fail")) {
+                        int returnCode = movementService.createFailMovementAction(parsedData);
+                        if (returnCode != 201) {
+                            alertModalCreator.createAlertModalWindow(
+                                "Ошибка",
+                                "Ошибка во время работа турникета",
+                                "Неудача прохода человека не записано!");
+                        }
+                        actionPerfomed = true;
+                        break;
+                    }
+                    Thread.sleep(10);
+                }
+                if (!actionPerfomed) {
+                    movementService.createFailMovementAction(parsedData);
+                }
+                mainController.updateMovements();
+            } catch (Exception e) {
+                alertModalCreator.createAlertModalWindow(
+                        "Ошибка",
+                        "Ошибка во время работы турникета",
+                        e.getMessage());
             }
-        } catch (Exception e) {
-            port.closePort();
-            System.out.println("Произошла ошибка с считыванием с порта!");
         }
+        alertModalCreator.createAlertModalWindow(
+                "Ошибка",
+                "Порт \"" + portDescriptor + "\" был закрыт!",
+                "Для записи перемещений порт необходимо снова открыть.");
+
     }
 
     /*
@@ -134,7 +155,6 @@ public class SerialPortController {
             byte[] writeBuffer = toWrite.trim().getBytes(StandardCharsets.UTF_8);
             int bytesWrote = port.writeBytes(writeBuffer, writeBuffer.length);
         }
-        else System.out.println("Порт закрыт!");
     }
 
     private String readFromPort() {

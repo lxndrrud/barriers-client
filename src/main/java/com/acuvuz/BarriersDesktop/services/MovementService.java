@@ -94,7 +94,7 @@ public class MovementService {
         }
     }
 
-    public Movement[] getMovementsForUser(int idStudent, int idEmployee, String from, String to) {
+    public Movement[] getMovementsForUser(int idStudent, int idEmployee, String from, String to, Integer idBuilding) {
         var client = HttpClientBuilder.create().build();
         try {
             HttpGet httpGet = new HttpGet(this.dotenvProvider.getHost() + "/movements/user");
@@ -104,6 +104,7 @@ public class MovementService {
                         .addParameter("id_student", Integer.toString(idStudent))
                         .addParameter("from", from)
                         .addParameter("to", to)
+                        .addParameter("id_building", idBuilding.toString())
                         .build();
             }
             else if (idEmployee != 0) {
@@ -111,6 +112,7 @@ public class MovementService {
                         .addParameter("id_employee", Integer.toString(idEmployee))
                         .addParameter("from", from)
                         .addParameter("to", to)
+                        .addParameter("id_building", idBuilding.toString())
                         .build();
             }
 

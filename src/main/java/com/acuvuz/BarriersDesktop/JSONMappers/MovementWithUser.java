@@ -5,6 +5,7 @@ import com.acuvuz.BarriersDesktop.utils.DateTimeParser;
 import java.util.Arrays;
 
 public class MovementWithUser {
+    final DateTimeParser dateTimeParser;
     public Movement movement;
     public User user;
 
@@ -25,7 +26,7 @@ public class MovementWithUser {
     }
 
     public String getEvent_timestamp() {
-        return DateTimeParser.parseTimestamp(movement.event_timestamp);
+        return dateTimeParser.parseTimestamp(movement.event_timestamp);
     }
 
     public int getId_student() {
@@ -60,6 +61,10 @@ public class MovementWithUser {
         if (movement.id_student != 0) return "Студент";
         else if (movement.id_employee != 0 ) return "Сотрудник";
         else return "Гость";
+    }
+
+    public MovementWithUser() {
+        dateTimeParser = new DateTimeParser();
     }
 }
 
