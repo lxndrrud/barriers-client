@@ -1,0 +1,10 @@
+# Для открытия псевдо-терминала для Serial port
+socat -d -d pty,raw,echo=0 pty,raw,echo=0
+
+# Для записи в порт
+echo "@Code=1;@Direction=enter" > /dev/pts/4
+
+# Для вывода из порта
+cat < /dev/pts/3
+
+

@@ -38,10 +38,9 @@ public class UserService {
                 return user;
             }
             client.close();
-            return new User();
+            return null;
         } catch (Exception e) {
-            System.out.println(e);
-            return new User();
+            return null;
         }
     }
 
@@ -62,7 +61,6 @@ public class UserService {
                 Gson gson = new Gson();
                 // Пропарсить сущность и вернуть её
                 Student student = gson.fromJson(data, Student.class);
-                client.close();
                 return student;
             }
             else {
@@ -70,7 +68,6 @@ public class UserService {
                         + response.getStatusLine().getReasonPhrase());
             }
         } catch (Exception e) {
-            System.out.println("Ошибка при запросе на сервер");
             throw e;
         }
     }
@@ -100,7 +97,6 @@ public class UserService {
                         + response.getStatusLine().getReasonPhrase());
             }
         } catch (Exception e) {
-            System.out.println("Ошибка при запросе на сервер");
             throw e;
         }
     }

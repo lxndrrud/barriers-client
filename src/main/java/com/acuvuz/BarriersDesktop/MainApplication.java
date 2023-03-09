@@ -8,6 +8,7 @@ import com.acuvuz.BarriersDesktop.utils.DotenvProvider;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 
 public class MainApplication extends Application {
@@ -24,6 +25,7 @@ public class MainApplication extends Application {
             stage.setFullScreen(true);
             stage.setMaximized(true);
             stage.setScene(scene);
+            stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
             MainController mainController = fxmlLoader.getController();
             loadPorts(mainController);
             mainController.loadBuildings();
@@ -48,11 +50,11 @@ public class MainApplication extends Application {
         dotenvProvider = new DotenvProvider();
 
         String port1 = dotenvProvider.getBarrier1Port();
-        barrier1Controller = new SerialPortController(port1, mainController);
+        barrier1Controller = new SerialPortController(port1, mainController, 1);
         mainController.setBarrier1PortController(barrier1Controller);
 
         String port2 = dotenvProvider.getBarrier1Port();
-        barrier2Controller = new SerialPortController(port2, mainController);
+        barrier2Controller = new SerialPortController(port2, mainController, 2);
         mainController.setBarrier2PortController(barrier2Controller);
     }
 

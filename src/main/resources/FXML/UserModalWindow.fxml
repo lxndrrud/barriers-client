@@ -91,7 +91,7 @@
                <left>
                   <ImageView fx:id="userPhoto" fitHeight="200.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                      <BorderPane.margin>
-                        <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                        <Insets bottom="5.0" left="10.0" right="20.0" top="5.0" />
                      </BorderPane.margin>
                   </ImageView>
                </left>
@@ -179,15 +179,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <HBox>
-                     <children>
-                        <ComboBox fx:id="buildingsComboBox" prefHeight="24.0" prefWidth="228.0">
-                           <HBox.margin>
-                              <Insets top="5.0" />
-                           </HBox.margin>
-                        </ComboBox>
-                     </children>
-                  </HBox>
+                  <ComboBox fx:id="buildingsComboBox" prefHeight="24.0" prefWidth="228.0" />
                </children>
             </VBox>
             <Button fx:id="updateButton" mnemonicParsing="false" onAction="#onUpdateButtonClick" prefHeight="38.0" prefWidth="228.0" text="Обновить" />

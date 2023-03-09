@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="882.0" prefWidth="1146.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.acuvuz.BarriersDesktop.controllers.MainController">
+<BorderPane prefHeight="882.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.acuvuz.BarriersDesktop.controllers.MainController">
    <center>
       <TableView fx:id="movementsTableView" prefHeight="464.0" prefWidth="643.0" BorderPane.alignment="CENTER">
         <columns>
@@ -176,15 +176,7 @@
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <HBox>
-                           <children>
-                              <ComboBox fx:id="buildingsComboBox" prefHeight="24.0" prefWidth="228.0">
-                                 <HBox.margin>
-                                    <Insets top="5.0" />
-                                 </HBox.margin>
-                              </ComboBox>
-                           </children>
-                        </HBox>
+                        <ComboBox fx:id="buildingsComboBox" prefHeight="24.0" prefWidth="228.0" />
                      </children>
                      <VBox.margin>
                         <Insets top="10.0" />
@@ -223,7 +215,16 @@
                            <children>
                               <VBox>
                                  <children>
-                                    <Label alignment="CENTER" prefHeight="16.0" prefWidth="151.0" text="Турникет 1" textAlignment="CENTER" />
+                                    <HBox>
+                                       <children>
+                                          <Label alignment="CENTER" prefHeight="16.0" prefWidth="85.0" text="Турникет 1" textAlignment="CENTER" />
+                                          <Label fx:id="indicatorBarrier1" alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="16.0" prefWidth="41.0" text="ВЫКЛ" textFill="RED">
+                                             <HBox.margin>
+                                                <Insets left="10.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                       </children>
+                                    </HBox>
                                     <Button fx:id="unlockEnterBarrier1Button" mnemonicParsing="false" onAction="#onUnlockBarrier1ButtonClick" prefHeight="24.0" prefWidth="150.0" text="Открыть 1">
                                        <VBox.margin>
                                           <Insets top="3.0" />
@@ -248,7 +249,16 @@
                               </VBox>
                               <VBox prefHeight="151.0" prefWidth="212.0">
                                  <children>
-                                    <Label alignment="CENTER" prefHeight="16.0" prefWidth="133.0" text="Турникет 2" />
+                                    <HBox>
+                                       <children>
+                                          <Label alignment="CENTER" prefHeight="16.0" prefWidth="80.0" text="Турникет 2" />
+                                          <Label fx:id="indicatorBarrier2" text="ВЫКЛ" textFill="RED">
+                                             <HBox.margin>
+                                                <Insets left="10.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                       </children>
+                                    </HBox>
                                     <Button fx:id="unlockEnterBarrier2Button" mnemonicParsing="false" onAction="#onUnlockBarrier2ButtonClick" prefHeight="20.0" prefWidth="228.0" text="Открыть 2">
                                        <VBox.margin>
                                           <Insets top="3.0" />
@@ -283,7 +293,7 @@
                   </VBox>
                </children>
                <VBox.margin>
-                  <Insets left="15.0" top="20.0" />
+                  <Insets left="10.0" top="20.0" />
                </VBox.margin>
             </VBox>
          </children>
@@ -302,7 +312,10 @@
             </Label>
             <HBox prefHeight="193.0" prefWidth="1105.0">
                <children>
-                  <ImageView fx:id="lastPersonPhoto" fitHeight="190.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="lastPersonPhoto" fitHeight="200.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin></ImageView>
                   <VBox prefHeight="204.0" prefWidth="444.0">
                      <children>
                         <TextField fx:id="fullnameLPTextField" alignment="CENTER" editable="false" promptText="ФИО">

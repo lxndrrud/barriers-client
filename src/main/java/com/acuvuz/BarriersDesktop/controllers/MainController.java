@@ -8,6 +8,7 @@ import com.acuvuz.BarriersDesktop.utils.AlertModalCreator;
 import com.acuvuz.BarriersDesktop.utils.DotenvProvider;
 import com.acuvuz.BarriersDesktop.services.UserService;
 import com.acuvuz.BarriersDesktop.utils.DateTimeParser;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.time.LocalDate;
 
@@ -39,6 +41,9 @@ public class MainController {
     public TextField typeLPTextField;
 
     public ImageView lastPersonPhoto;
+
+    public Label indicatorBarrier1;
+    public Label indicatorBarrier2;
 
     final MovementService movementService;
     final BuildingsService buildingsService;
@@ -79,17 +84,29 @@ public class MainController {
     }
 
     public void onOpenPort1ButtonClick() {
-        barrier1PortController.run();
+        barrier1PortController.openPort();
     }
 
     public void onClosePort1ButtonClick() {
         barrier1PortController.closePort();
     }
 
-    public void onOpenPort2ButtonClick() { barrier2PortController.run(); }
+    public void onOpenPort2ButtonClick() { barrier2PortController.openPort(); }
 
     public void onClosePort2ButtonClick() {
         barrier2PortController.closePort();
+    }
+
+    public void updateBarrierIndicator(Integer barrierNumber, Boolean value) {
+        Platform.runLater(() -> {
+            if (barrierNumber == 1) {
+                indicatorBarrier1.setText(value ? "ВКЛ" : "ВЫКЛ");
+                indicatorBarrier1.setTextFill(value ? Color.color(0, 1, 0):  Color.color(1, 0, 0));
+            } else if (barrierNumber == 2) {
+                indicatorBarrier2.setText(value ? "ВКЛ" : "ВЫКЛ");
+                indicatorBarrier2.setTextFill(value ? Color.color(0, 1, 0):  Color.color(1, 0, 0));
+            }
+        });
     }
 
     public void updateMovements() {

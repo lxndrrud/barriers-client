@@ -17,14 +17,16 @@ public class SerialPortController {
     private final AlertModalCreator alertModalCreator;
     private SerialPort port;
     private String portDescriptor;
+    private Integer mainControllerPortNumber;
 
     private Thread thread;
 
-    public SerialPortController(String portDescriptor, MainController mainController1) {
+    public SerialPortController(String portDescriptor, MainController mainController1, Integer mainControllerPortNumber) {
         movementService = new MovementService();
         userService = new UserService();
         alertModalCreator = new AlertModalCreator();
         mainController = mainController1;
+        this.mainControllerPortNumber = mainControllerPortNumber;
         this.portDescriptor = portDescriptor;
         port = SerialPort.getCommPort(portDescriptor);
     }
@@ -34,7 +36,7 @@ public class SerialPortController {
     }
 
     public void openPort() {
-        if (!thread.isAlive()) {
+        if (this.thread == null || !thread.isAlive()) {
             run();
         }
     }
@@ -43,6 +45,7 @@ public class SerialPortController {
         port.setBaudRate(9600);
         port.openPort();
 
+        mainController.updateBarrierIndicator(mainControllerPortNumber, true);
         while (port.isOpen()) {
             try {
                 String portData = readFromPort();
@@ -50,7 +53,7 @@ public class SerialPortController {
                 var parsedData = new ParsedPortData(portData);
 
                 User user = userService.sendSkudCardInfo(parsedData.getCode());
-                if (user.id == 0) {
+                if (user == null) {
                     alarmBarrier(parsedData.getReader());
                     alertModalCreator.createAlertModalWindow(
                             "Ошибка", "Пользователь не найден!", ""
@@ -68,24 +71,24 @@ public class SerialPortController {
                     String fromPort = readFromPort();
                     // enter or exit success
                     if (fromPort.equals(parsedData.getReader() + "-success")) {
-                        int returnCode = movementService
-                                .createMovementAction(parsedData);
-                        if (returnCode != 201) {
+                        try {
+                            movementService.createMovementAction(parsedData);
+                        } catch (Exception e) {
                             alertModalCreator.createAlertModalWindow(
                                     "Ошибка",
                                     "Ошибка во время работа турникета",
-                                    "Перемещение человека не записано!");
-
+                                    "Перемещение человека не записано! " + e.getMessage());
                         }
                         actionPerfomed = true;
                         break;
                     } else if (fromPort.equals(parsedData.getReader() + "-fail")) {
-                        int returnCode = movementService.createFailMovementAction(parsedData);
-                        if (returnCode != 201) {
+                        try {
+                            movementService.createFailMovementAction(parsedData);
+                        } catch (Exception e) {
                             alertModalCreator.createAlertModalWindow(
-                                "Ошибка",
-                                "Ошибка во время работа турникета",
-                                "Неудача прохода человека не записано!");
+                                    "Ошибка",
+                                    "Ошибка во время работа турникета",
+                                    "Неудача прохода человека не записано! " + e.getMessage());
                         }
                         actionPerfomed = true;
                         break;
@@ -103,6 +106,7 @@ public class SerialPortController {
                         e.getMessage());
             }
         }
+        mainController.updateBarrierIndicator(mainControllerPortNumber, false);
         alertModalCreator.createAlertModalWindow(
                 "Ошибка",
                 "Порт \"" + portDescriptor + "\" был закрыт!",

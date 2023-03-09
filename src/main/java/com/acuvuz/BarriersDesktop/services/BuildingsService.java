@@ -18,7 +18,7 @@ public class BuildingsService {
         this.dotenvProvider = new DotenvProvider();
     }
 
-    public Building[] GetAll() {
+    public Building[] GetAll() throws Exception {
         var link = this.dotenvProvider.getHost() + "/buildings";
         try {
             var client = HttpClientBuilder.create().build();
@@ -34,10 +34,10 @@ public class BuildingsService {
                 return result;
             } else {
                 client.close();
-                return new Building[]{};
+                throw new Exception(response.getEntity().getContent().toString());
             }
         } catch (Exception e) {
-            return new Building[]{};
+            throw e;
         }
     }
 }

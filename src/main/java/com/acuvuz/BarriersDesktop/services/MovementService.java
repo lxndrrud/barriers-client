@@ -15,6 +15,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 
+import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class MovementService {
         this.dotenvProvider = new DotenvProvider();
     }
 
-    public MovementWithUser[] getAll(int id_building, String from, String to) {
+    public MovementWithUser[] getAll(int id_building, String from, String to) throws Exception {
         var link = this.dotenvProvider.getHost() + "/movements";
         try {
             var client = HttpClientBuilder.create().build();
@@ -49,22 +50,22 @@ public class MovementService {
                 return result;
             } else {
                 client.close();
-                return new MovementWithUser[]{};
+                throw new Exception(response.getEntity().getContent().toString());
             }
         } catch (Exception e ) {
-            return new MovementWithUser[]{};
+            throw e;
         }
     }
 
-    public int createMovementAction(ParsedPortData parsedPortData) {
-        return sendCreateMovementActionRequest(parsedPortData.getReader(), parsedPortData.getCode());
+    public void createMovementAction(ParsedPortData parsedPortData) throws IOException {
+        sendCreateMovementActionRequest(parsedPortData.getReader(), parsedPortData.getCode());
     }
 
-    public int createFailMovementAction(ParsedPortData parsedPortData) {
-        return sendCreateMovementActionRequest("fail", parsedPortData.getCode());
+    public void createFailMovementAction(ParsedPortData parsedPortData) throws IOException {
+        sendCreateMovementActionRequest("fail", parsedPortData.getCode());
     }
 
-    private int sendCreateMovementActionRequest(String event, String skudCard) {
+    private void sendCreateMovementActionRequest(String event, String skudCard) throws IOException {
         try {
             var client = HttpClientBuilder.create().build();
 
@@ -85,16 +86,13 @@ public class MovementService {
              */
 
             client.close();
-            int returnCode = response.getStatusLine().getStatusCode();
 
-            return returnCode;
         } catch (Exception e ) {
-            System.out.println("Ошибка при запросе на сервер");
-            return 500;
+            throw e;
         }
     }
 
-    public Movement[] getMovementsForUser(int idStudent, int idEmployee, String from, String to, Integer idBuilding) {
+    public Movement[] getMovementsForUser(int idStudent, int idEmployee, String from, String to, Integer idBuilding) throws Exception {
         var client = HttpClientBuilder.create().build();
         try {
             HttpGet httpGet = new HttpGet(this.dotenvProvider.getHost() + "/movements/user");
@@ -129,15 +127,11 @@ public class MovementService {
                 return movements;
             }
             else {
-                var exception = new Exception(response.getStatusLine().getStatusCode()
-                        + response.getStatusLine().getReasonPhrase());
                 client.close();
-                throw exception;
+                throw new Exception(response.getEntity().getContent().toString());
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Ошибка при запросе на сервер");
-            return new Movement[]{};
+            throw e;
         }
     }
 }
